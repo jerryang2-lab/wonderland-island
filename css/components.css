@@ -1081,3 +1081,694 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   單字探險島 (Words Island - 1000 常用字) 專屬樣式
+   ========================================================================== */
+.words-mode-nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.words-mode-tab-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid rgba(255, 112, 166, 0.25);
+  border-radius: 9999px;
+  padding: 10px 22px;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.words-mode-tab-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-pink);
+  background: #FFFFFF;
+}
+
+.words-mode-tab-btn.active {
+  background: linear-gradient(135deg, #FF70A6, #FF9F1C);
+  color: #FFFFFF;
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(255, 112, 166, 0.4);
+}
+
+/* 篩選與搜尋工具條 */
+.words-filter-container {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: var(--border-radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 28px;
+  border: 2px solid rgba(255, 209, 102, 0.35);
+}
+
+.words-search-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.words-search-box {
+  flex: 1;
+  min-width: 240px;
+  position: relative;
+}
+
+.words-search-input {
+  width: 100%;
+  padding: 12px 18px 12px 42px;
+  border-radius: 9999px;
+  border: 2px solid #E2E8F0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.words-search-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(17, 138, 178, 0.15);
+}
+
+.words-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94A3B8;
+  font-size: 1.1rem;
+}
+
+.words-result-badge {
+  font-weight: 700;
+  color: #0284C7;
+  background: #E0F2FE;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+/* A-Z 字母列 */
+.alphabet-scroll-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 8px 2px 14px 2px;
+  scrollbar-width: thin;
+}
+
+.alphabet-scroll-bar::-webkit-scrollbar {
+  height: 6px;
+}
+.alphabet-scroll-bar::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 10px;
+}
+
+.letter-chip {
+  min-width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #475569;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.letter-chip:hover {
+  transform: scale(1.1);
+  border-color: var(--primary-pink);
+  color: var(--primary-pink);
+}
+
+.letter-chip.active {
+  background: var(--primary-pink);
+  border-color: var(--primary-pink);
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(255, 112, 166, 0.4);
+}
+
+/* 分類藥丸選單 */
+.category-filter-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-top: 10px;
+  scrollbar-width: none;
+}
+.category-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-pill-btn {
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  background: #F8FAFC;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cat-pill-btn:hover {
+  background: #FFFFFF;
+  border-color: var(--primary-mint);
+  color: #0F766E;
+}
+
+.cat-pill-btn.active {
+  background: var(--primary-mint);
+  color: #FFFFFF;
+  border-color: var(--primary-mint);
+  box-shadow: 0 3px 8px rgba(6, 214, 160, 0.3);
+}
+
+/* 學習數據微型統計看板 */
+.words-stats-banner {
+  display: flex;
+  justify-content: space-around;
+  background: linear-gradient(135deg, rgba(255, 241, 197, 0.8), rgba(255, 227, 237, 0.8));
+  border-radius: var(--border-radius-md);
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  border: 2px dashed rgba(255, 112, 166, 0.3);
+}
+
+.words-stat-item {
+  text-align: center;
+}
+
+.words-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #B45309;
+}
+
+.words-stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #78350F;
+}
+
+/* 子面板切換容器 */
+.words-subpanel {
+  display: none;
+}
+.words-subpanel.active {
+  display: block;
+}
+
+/* ================== 1. 3D 字卡翻翻樂 ================== */
+.flashcard-stage {
+  max-width: 620px;
+  margin: 0 auto 30px auto;
+  perspective: 1200px;
+}
+
+.flashcard-3d-wrap {
+  width: 100%;
+  height: 380px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flashcard-3d-wrap.flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  border-radius: var(--border-radius-lg);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 16px 36px rgba(255, 112, 166, 0.16), 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 3px solid rgba(255, 255, 255, 0.8);
+}
+
+.flashcard-front {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F8 100%);
+}
+
+.flashcard-back {
+  background: linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%);
+  transform: rotateY(180deg);
+  border-color: #86EFAC;
+}
+
+.flashcard-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-tag {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #FFE4E6;
+  color: #BE123C;
+}
+
+.card-fav-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.card-fav-btn:hover {
+  transform: scale(1.2);
+}
+
+.card-body-main {
+  text-align: center;
+}
+
+.card-emoji-icon {
+  font-size: 4.2rem;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.1));
+  animation: floatSlow 3s ease-in-out infinite;
+}
+
+.card-word-title {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  line-height: 1.1;
+  letter-spacing: 0.5px;
+}
+
+.card-phonetic-text {
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #64748B;
+  margin-top: 6px;
+}
+
+.card-hint-pill {
+  font-size: 0.85rem;
+  color: #94A3B8;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 卡片背面樣式 */
+.card-zh-title {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #0F766E;
+  margin-bottom: 12px;
+}
+
+.card-example-box {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px dashed #A7F3D0;
+  border-radius: var(--border-radius-md);
+  padding: 14px 18px;
+  margin-top: 8px;
+  text-align: left;
+  width: 100%;
+}
+
+.card-example-en {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 4px;
+}
+
+.card-example-zh {
+  font-size: 0.95rem;
+  color: #64748B;
+}
+
+/* 字卡控制列 */
+.flashcard-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.card-ctrl-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: #FFFFFF;
+  color: var(--text-main);
+  font-size: 1.4rem;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.card-ctrl-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  color: var(--primary-pink);
+}
+
+.card-action-pill {
+  padding: 10px 20px;
+  border-radius: 9999px;
+  border: 2px solid #E2E8F0;
+  background: #FFFFFF;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.card-action-pill:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+.card-action-pill.active {
+  background: #0284C7;
+  color: #FFFFFF;
+  border-color: #0284C7;
+}
+
+/* ================== 2. 拼字魔法打字機 ================== */
+.spell-stage {
+  max-width: 680px;
+  margin: 0 auto;
+  background: #FFFFFF;
+  border-radius: var(--border-radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+  border: 3px solid rgba(17, 138, 178, 0.18);
+}
+
+.spell-hint-card {
+  background: linear-gradient(135deg, #F0F9FF, #FFFBEB);
+  border-radius: var(--border-radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.spell-hint-icon {
+  font-size: 3.5rem;
+}
+
+.spell-hint-zh {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0369A1;
+}
+
+.spell-slots-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.spell-slot {
+  width: 54px;
+  height: 60px;
+  border-bottom: 4px solid #CBD5E1;
+  background: #F8FAFC;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  transition: all 0.2s;
+}
+
+.spell-slot.filled {
+  border-color: var(--primary-mint);
+  background: #F0FDF4;
+  color: #0F766E;
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(6, 214, 160, 0.15);
+}
+
+.spell-tiles-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.spell-tile-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  border: 2px solid #E2E8F0;
+  background: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1E293B;
+  box-shadow: 0 6px 0 #CBD5E1, 0 8px 12px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.12s;
+  user-select: none;
+}
+
+.spell-tile-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #CBD5E1;
+}
+
+.spell-tile-btn.used {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #CBD5E1;
+}
+
+.spell-feedback {
+  min-height: 36px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 16px 0;
+}
+.spell-feedback.success { color: #16A34A; }
+.spell-feedback.error { color: #DC2626; }
+
+/* ================== 3. 單字測驗 Quiz ================== */
+.words-quiz-stage {
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.words-quiz-card {
+  background: #FFFFFF;
+  border-radius: var(--border-radius-lg);
+  padding: 36px 30px;
+  box-shadow: var(--shadow-card);
+  border: 3px solid rgba(255, 112, 166, 0.2);
+}
+
+.quiz-opt-btn {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: var(--border-radius-md);
+  border: 2px solid #E2E8F0;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1E293B;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.quiz-opt-btn:hover:not(:disabled) {
+  border-color: var(--primary-blue);
+  background: #F0F9FF;
+  transform: translateX(4px);
+}
+
+.opt-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #E2E8F0;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.quiz-opt-btn.correct {
+  border-color: #22C55E;
+  background: #F0FDF4;
+  color: #15803D;
+}
+.quiz-opt-btn.correct .opt-badge {
+  background: #22C55E;
+  color: #FFFFFF;
+}
+
+.quiz-opt-btn.wrong {
+  border-color: #EF4444;
+  background: #FEF2F2;
+  color: #B91C1C;
+}
+.quiz-opt-btn.wrong .opt-badge {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+/* ================== 4. 1000 字大字典清單 ================== */
+.words-dict-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.word-dict-card {
+  background: #FFFFFF;
+  border-radius: var(--border-radius-sm);
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid #E2E8F0;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.word-dict-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--primary-pink);
+}
+
+.dict-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.dict-card-icon {
+  font-size: 1.4rem;
+}
+
+.dict-card-cat {
+  font-size: 0.75rem;
+  background: #F1F5F9;
+  color: #64748B;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.dict-speak-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.7;
+}
+.dict-speak-btn:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.dict-card-word {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  line-height: 1.2;
+}
+
+.dict-card-phonetic {
+  font-size: 0.85rem;
+  color: #94A3B8;
+  margin-bottom: 4px;
+}
+
+.dict-card-zh {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1E293B;
+  margin-bottom: 6px;
+}
+
+.dict-card-ex {
+  font-size: 0.82rem;
+  color: #64748B;
+  line-height: 1.4;
+  border-top: 1px dashed #F1F5F9;
+  padding-top: 6px;
+}
+

@@ -22,7 +22,10 @@ class AppManager {
       memoryMaster: { name: "記憶力超人", icon: "🦁", desc: "成功匹配所有萌萌動物卡片" },
       balloonPopper: { name: "戳戳神射手", icon: "🎈", desc: "氣球消消樂獲得 100 分以上" },
       artist: { name: "創意小畫家", icon: "🎨", desc: "在彩虹小畫板揮灑創意作品" },
-      scholar: { name: "智慧小博士", icon: "💡", desc: "完成探索小百科的益智問答" }
+      scholar: { name: "智慧小博士", icon: "💡", desc: "完成探索小百科的益智問答" },
+      wordLearner: { name: "單字小探險家", icon: "🔤", desc: "探索翻閱 20 個常用單字卡片" },
+      spellingChampion: { name: "拼字神射手", icon: "🎯", desc: "成功拼出 10 個正確字母單字" },
+      quizMaster: { name: "單字智多星", icon: "🏆", desc: "在單字測驗挑戰中獲得 100 分滿分" }
     };
   }
 
@@ -39,6 +42,7 @@ class AppManager {
     if (window.toysManager) window.toysManager.init();
     if (window.gamesManager) window.gamesManager.init();
     if (window.knowledgeManager) window.knowledgeManager.init();
+    if (window.wordsManager) window.wordsManager.init();
 
     // 設置初始角色視角
     this.switchRole("kids");

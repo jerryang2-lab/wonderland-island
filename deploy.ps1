@@ -1,11 +1,10 @@
-param (
+﻿param (
     [Parameter(Mandatory=$false)]
-    [string]$Message = "網頁介面與功能例行更新"
+    [string]$Message = "Routine web update"
 )
 
 $ErrorActionPreference = "Stop"
 
-# 確認目前路徑在專案目錄
 Set-Location -Path $PSScriptRoot
 
 $now = Get-Date
@@ -14,42 +13,45 @@ $tagStamp = $now.ToString("yyyyMMdd-HHmmss")
 $tagName = "release-$tagStamp"
 
 Write-Host "======================================================" -ForegroundColor Cyan
-Write-Host "🚀 準備部署 website 至 GitHub..." -ForegroundColor Cyan
-Write-Host "🕒 時間戳記: $timestamp" -ForegroundColor Yellow
-Write-Host "🏷️  版本標籤: $tagName" -ForegroundColor Yellow
-Write-Host "📝 變更摘要: $Message" -ForegroundColor Yellow
+Write-Host "Deploying website to GitHub..." -ForegroundColor Cyan
+Write-Host "Timestamp: $timestamp" -ForegroundColor Yellow
+Write-Host "Tag: $tagName" -ForegroundColor Yellow
+Write-Host "Message: $Message" -ForegroundColor Yellow
 Write-Host "======================================================" -ForegroundColor Cyan
 
-# 1. 寫入或追加部署時間戳紀錄至 DEPLOY_LOG.md
+# 1. Update DEPLOY_LOG.md
 $logFile = Join-Path $PSScriptRoot "DEPLOY_LOG.md"
 if (-not (Test-Path $logFile)) {
-    @"
-# 奇幻歡樂島 - 部署與發布時間戳日誌 (Deployment Log)
-
-| 部署時間 (Timestamp) | 發布標籤 (Tag) | 操作者 | 變更摘要 |
-| :--- | :--- | :--- | :--- |
-"@ | Out-File -FilePath $logFile -Encoding utf8
+    $header = "# Wonderland Island - Deployment Log`n`n| Timestamp | Tag | Operator | Message |`n| :--- | :--- | :--- | :--- |"
+    [System.IO.File]::WriteAllText($logFile, $header, [System.Text.Encoding]::UTF8)
 }
-"| $timestamp | $tagName | $env:USERNAME | $Message |" | Out-File -FilePath $logFile -Append -Encoding utf8
+$logEntry = "`n| $timestamp | $tagName | $env:USERNAME | $Message |"
+[System.IO.File]::AppendAllText($logFile, $logEntry, [System.Text.Encoding]::UTF8)
 
-# 2. 暫存變更並提交 Commit
-Write-Host "📦 [1/3] 暫存檔案並建立提交..." -ForegroundColor Cyan
+# 2. Stage and commit
+Write-Host "[1/3] Staging files and committing..." -ForegroundColor Cyan
 git add .
 $commitStatus = git status --porcelain
 if (-not $commitStatus) {
-    Write-Host "⚠️ 沒有偵測到任何檔案修改，跳過 Commit。" -ForegroundColor Yellow
+    Write-Host "No changes detected, skipping commit." -ForegroundColor Yellow
 } else {
     git commit -m "deploy: $Message [$timestamp]"
 }
 
-# 3. 建立帶註解之時間戳記標籤
-Write-Host "🏷️  [2/3] 建立 Git 發布標籤: $tagName..." -ForegroundColor Cyan
-git tag -a $tagName -m "部署於 $timestamp - $Message"
+# 3. Create annotated Git tag
+Write-Host "[2/3] Creating version tag: $tagName..." -ForegroundColor Cyan
+git tag -a $tagName -m "Deploy at $timestamp - $Message"
 
-# 4. 推送至 GitHub
-Write-Host "☁️  [3/3] 推送程式碼與標籤至 GitHub (origin main)..." -ForegroundColor Cyan
-git push origin main --tags
-
-Write-Host ""
-Write-Host "🎉 部署完成！GitHub Pages 將自動偵測並於數分鐘內完成線上更新。" -ForegroundColor Green
+# 4. Push to GitHub
+$hasRemote = git remote
+if (-not $hasRemote) {
+    Write-Host "Notice: No GitHub remote (origin) configured yet." -ForegroundColor Yellow
+    Write-Host "To link GitHub repository, run:" -ForegroundColor Yellow
+    Write-Host "  git remote add origin https://github.com/<username>/<repo>.git" -ForegroundColor Cyan
+    Write-Host "  git push -u origin main --tags" -ForegroundColor Cyan
+} else {
+    Write-Host "[3/3] Pushing to GitHub (origin main)..." -ForegroundColor Cyan
+    git push origin main --tags
+    Write-Host "Deployment completed!" -ForegroundColor Green
+}
 Write-Host "======================================================" -ForegroundColor Cyan
