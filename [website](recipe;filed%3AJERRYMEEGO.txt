@@ -1,0 +1,1 @@
+[website](recipe;file:///d%3A/JERRY/ME/EGO/AI/website/.agents/workflows/website.md) 增加英文字母與單字(常用1000字)練習，使用者和風格與原來相同；先保存現有版本，如果換版錯誤時可還原；修改後先測試沒有異常才可換版上線。
