@@ -204,6 +204,43 @@ class SoundEngine {
     this.synth.speak(utterance);
   }
 
+  // 7. 英語單字發音朗讀 (English Word Pronunciation)
+  speakWord(word, lang = 'en-US', onStart, onEnd) {
+    if (this.isMuted || !this.synth) return;
+
+    this.stopSpeech();
+
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = lang;
+    utterance.rate = 0.88; // 稍微放慢讓發音與音節更清楚
+    utterance.pitch = 1.05;
+
+    // 優先選取英語配音員
+    const voices = this.synth.getVoices();
+    const enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Samantha') || v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('David')));
+    if (enVoice) {
+      utterance.voice = enVoice;
+    }
+
+    utterance.onstart = () => {
+      this.isSpeaking = true;
+      if (onStart) onStart();
+    };
+
+    utterance.onend = () => {
+      this.isSpeaking = false;
+      if (onEnd) onEnd();
+    };
+
+    utterance.onerror = () => {
+      this.isSpeaking = false;
+      if (onEnd) onEnd();
+    };
+
+    this.currentUtterance = utterance;
+    this.synth.speak(utterance);
+  }
+
   stopSpeech() {
     if (this.synth && this.synth.speaking) {
       this.synth.cancel();

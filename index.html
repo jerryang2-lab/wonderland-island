@@ -108,6 +108,12 @@
             <span class="tab-label">探索小百科</span>
           </button>
         </li>
+        <li class="nav-tab-item">
+          <button class="nav-tab-btn" data-tab="words" id="tabWords">
+            <span class="tab-icon">🔤</span>
+            <span class="tab-label">單字探險島</span>
+          </button>
+        </li>
       </ul>
     </nav>
 
@@ -124,6 +130,9 @@
           <div class="hero-actions">
             <button class="btn-primary" onclick="window.appManager.switchTab('story')">
               <span>📖 開啟今日繪本</span>
+            </button>
+            <button class="btn-primary" onclick="window.appManager.switchTab('words')" style="background: linear-gradient(135deg, #FF70A6, #FF9F1C);">
+              <span>🔤 1000常用單字島</span>
             </button>
             <button class="btn-secondary" onclick="window.appManager.switchTab('toys')">
               <span>🧸 探索魔法玩具</span>
@@ -154,8 +163,15 @@
         </div>
       </section>
 
-      <!-- 四大核心主題島嶼卡片 -->
-      <section class="grid-cards" aria-label="四大主題板塊">
+      <!-- 核心主題島嶼卡片 -->
+      <section class="grid-cards" aria-label="核心主題板塊">
+        <article class="feature-card" data-theme="words" id="cardWords" style="border: 2px solid rgba(255, 112, 166, 0.4);">
+          <div class="feature-card-icon" style="background: linear-gradient(135deg, #FF70A6, #FF9F1C);">🔤</div>
+          <h3 class="feature-card-title">單字探險島</h3>
+          <p class="feature-card-desc">1000 常用核心字彙！A~Z 字母 3D 字卡翻翻樂、字母拼字小練習，以及聽音測驗 Quiz 大挑戰！</p>
+          <div class="feature-card-cta">開始學習 <span>➡️</span></div>
+        </article>
+
         <article class="feature-card" data-theme="story" id="cardStory">
           <div class="feature-card-icon">📖</div>
           <h3 class="feature-card-title">奇幻故事島</h3>
@@ -520,6 +536,273 @@
       </div>
     </section>
 
+    <!-- ================= 板塊 6：字母單字探險島 (Words Island - 1000 常用字) ================= -->
+    <section class="tab-panel" id="panel-words">
+      <!-- 頂部 Hero 導引卡片 -->
+      <div class="hero-card" style="margin-bottom: 24px; background: linear-gradient(135deg, #FFF0F5 0%, #FFFBEB 50%, #F0FDF4 100%);">
+        <div class="hero-text">
+          <div class="hero-badge" style="background: rgba(255, 112, 166, 0.15); color: #BE123C;">🔤 1000 常用核心字彙樂園</div>
+          <h2 class="hero-title">字母單字<span>探險島</span></h2>
+          <p class="hero-desc">
+            A~Z 常用千字輕鬆學！翻轉 3D 單字卡聆聽地道發音、在字母打字機上動手拼字，還能挑戰緊張刺激的看字選中與聽音辨字 Quiz 大挑戰！
+          </p>
+        </div>
+        <div style="text-align: center; min-width: 140px;">
+          <div style="font-size: 4.5rem; animation: floatSlow 3s ease-in-out infinite;">🔤</div>
+          <div style="font-weight: 700; color: #118AB2; font-size: 0.95rem;">A 到 Z 快樂開口說</div>
+        </div>
+      </div>
+
+      <!-- 微型學習數據看板 -->
+      <div class="words-stats-banner">
+        <div class="words-stat-item">
+          <div class="words-stat-value" id="statsLearnedCount">0</div>
+          <div class="words-stat-label">📖 探索次數</div>
+        </div>
+        <div class="words-stat-item">
+          <div class="words-stat-value" id="statsFavCount">0</div>
+          <div class="words-stat-label">❤️ 收藏生字</div>
+        </div>
+        <div class="words-stat-item">
+          <div class="words-stat-value" id="statsBestScore">0 分</div>
+          <div class="words-stat-label">🏆 測驗最佳紀錄</div>
+        </div>
+      </div>
+
+      <!-- 四大子模式切換按鈕 -->
+      <nav class="words-mode-nav" aria-label="單字島功能選單">
+        <button class="words-mode-tab-btn active" data-mode="flashcards">
+          <span>🃏</span> 字卡翻翻樂
+        </button>
+        <button class="words-mode-tab-btn" data-mode="spelling">
+          <span>🧩</span> 拼字小練習
+        </button>
+        <button class="words-mode-tab-btn" data-mode="quiz">
+          <span>🏆</span> 測驗大挑戰 (Quiz)
+        </button>
+        <button class="words-mode-tab-btn" data-mode="browser">
+          <span>📚</span> 1000 字大字典
+        </button>
+      </nav>
+
+      <!-- 萬能檢索與篩選器 (A-Z 與 15+ 生活主題) -->
+      <div class="words-filter-container">
+        <div class="words-search-row">
+          <div class="words-search-box">
+            <span class="words-search-icon">🔍</span>
+            <input type="text" class="words-search-input" id="wordsSearchInput" placeholder="搜尋英文單字或中文釋義 (例如: apple, 貓咪, 學校)...">
+          </div>
+          <div class="words-result-badge" id="wordsResultCount">共 1039 個單字</div>
+        </div>
+
+        <!-- A-Z 字母列 -->
+        <div class="alphabet-scroll-bar" id="wordsAlphabetBar">
+          <!-- 由 words.js 渲染 -->
+        </div>
+
+        <!-- 主題情境分類藥丸列 -->
+        <div class="category-filter-bar" id="wordsCategoryFilter">
+          <!-- 由 words.js 渲染 -->
+        </div>
+      </div>
+
+      <!-- 子面板 1：3D 字卡翻翻樂 -->
+      <div class="words-subpanel active" id="words-panel-flashcards">
+        <div class="flashcard-stage">
+          <div class="flashcard-3d-wrap" id="flashcardElement" title="點擊卡片翻轉正面/背面">
+            <!-- 正面 -->
+            <div class="flashcard-front">
+              <div class="flashcard-header">
+                <span class="card-tag" id="cardLetterTag">Letter A</span>
+                <span class="card-hint-pill">👆 點擊卡片翻面看中文</span>
+                <button class="card-fav-btn" id="cardFavBtn" title="收藏至生字本">🤍</button>
+              </div>
+              <div class="card-body-main">
+                <div class="card-emoji-icon" id="cardIconEmoji">🍎</div>
+                <div class="card-word-title" id="cardWordText">apple</div>
+                <div class="card-phonetic-text" id="cardPhoneticText">n. /ˈæpl/</div>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button class="card-action-pill" id="cardSpeakBtn" title="朗讀單字發音">
+                  <span>🔊 發音跟讀</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 背面 -->
+            <div class="flashcard-back">
+              <div class="flashcard-header">
+                <span class="card-tag" id="cardCategoryBadge" style="background: #DCFCE7; color: #15803D;">美味食物</span>
+                <span class="card-hint-pill">👆 點擊翻回正面</span>
+                <div style="font-size: 1.5rem;">✨</div>
+              </div>
+              <div class="card-body-main" style="width: 100%;">
+                <div class="card-zh-title" id="cardZhText">蘋果</div>
+                <div class="card-example-box">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #0284C7;">生活實用例句</span>
+                    <button style="border: none; background: transparent; cursor: pointer; font-size: 1rem;" onclick="window.wordsManager.speakCurrentExample()" title="朗讀例句">🔊</button>
+                  </div>
+                  <div class="card-example-en" id="cardExampleEn">An apple a day keeps the doctor away.</div>
+                  <div class="card-example-zh" id="cardExampleZh">一天一蘋果，醫生遠離我。</div>
+                </div>
+              </div>
+              <div style="font-size: 0.82rem; color: #94A3B8;">🌟 記得多大聲跟讀幾次，加深發音記憶喔！</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 字卡導航控制列 -->
+        <div class="flashcard-controls">
+          <button class="card-ctrl-btn" id="cardPrevBtn" title="上一個單字">⬅️</button>
+          <span id="cardProgressText" style="font-family: var(--font-display); font-weight: 700; color: #64748B;">1 / 1039</span>
+          <button class="card-ctrl-btn" id="cardNextBtn" title="下一個單字">➡️</button>
+          <button class="card-action-pill" id="cardRandomBtn" title="隨機挑選單字">
+            <span>🎲 隨機跳轉</span>
+          </button>
+          <button class="card-action-pill" id="cardAutoPlayBtn" title="自動翻卡與朗讀">
+            <span>▶️ 自動翻讀</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 子面板 2：字母拼字魔法打字機 -->
+      <div class="words-subpanel" id="words-panel-spelling">
+        <div class="spell-stage">
+          <div class="spell-hint-card">
+            <div class="spell-hint-icon" id="spellHintIcon">🍎</div>
+            <div>
+              <div class="spell-hint-zh" id="spellHintZh">蘋果</div>
+              <div style="font-size: 0.95rem; color: #64748B;" id="spellHintPos">n. • 美味食物</div>
+            </div>
+            <button class="btn-secondary" id="spellSpeakBtn" style="margin-left: auto; border-radius: 9999px;">
+              <span>聽發音</span> 🔊
+            </button>
+          </div>
+
+          <div style="font-size: 0.95rem; color: #64748B; margin-bottom: 12px;">
+            請依照正確順序點選下方的字母積木，拼出正確單字：
+          </div>
+
+          <!-- 拼字槽位 -->
+          <div class="spell-slots-wrapper" id="spellSlotsContainer"></div>
+
+          <!-- 打散的字母積木池 -->
+          <div class="spell-tiles-wrapper" id="spellTilesContainer"></div>
+
+          <!-- 反饋文字 -->
+          <div class="spell-feedback" id="spellFeedback"></div>
+
+          <!-- 輔助操作按鈕 -->
+          <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button class="btn-secondary" id="spellUndoBtn">
+              <span>↩️ 撤銷最後字母</span>
+            </button>
+            <button class="btn-secondary" id="spellHintBtn">
+              <span>💡 提示下個字母</span>
+            </button>
+            <button class="btn-primary" id="spellNextBtn">
+              <span>換一題 ➡️</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 子面板 3：單字測驗大挑戰 (Quiz) -->
+      <div class="words-subpanel" id="words-panel-quiz">
+        <div class="words-quiz-stage">
+          <!-- Quiz 模式引導卡 -->
+          <div class="words-quiz-card" id="quizIntroCard" style="text-align: center;">
+            <div style="font-size: 3.8rem; margin-bottom: 12px;">🏆</div>
+            <h3 style="font-family: var(--font-display); font-size: 2rem; color: #2D3142; margin-bottom: 10px;">
+              常用單字益智挑戰 Quiz
+            </h3>
+            <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 24px;">
+              每次挑戰包含 10 道精選題目，連對享有加分 Combo！挑戰滿分贏取金色小星星與「單字智多星」榮譽徽章！
+            </p>
+            <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+              <button class="btn-primary start-quiz-btn" data-quiz-type="en-to-zh">
+                <span>🔤 英翻中挑戰 (看英文選中文)</span>
+              </button>
+              <button class="btn-secondary start-quiz-btn" data-quiz-type="zh-to-en">
+                <span>🇹🇼 中翻英挑戰 (看中文選英文)</span>
+              </button>
+              <button class="btn-primary start-quiz-btn" data-quiz-type="listening" style="background: linear-gradient(135deg, #118AB2, #06D6A0);">
+                <span>🎧 聽音辨字考驗 (聽發音選單字)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quiz 答題區 -->
+          <div class="words-quiz-card" id="quizPlayArea" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <span id="wordsQuizProgress" style="font-weight: 700; color: #0284C7; font-size: 1.1rem;">第 1 / 10 題</span>
+              <button id="wordsQuizAudioBtn" class="action-pill-btn" style="padding: 6px 14px; font-size: 0.95rem;">
+                <span>🔊 重新聽發音</span>
+              </button>
+              <span id="wordsQuizScore" style="font-family: var(--font-display); font-weight: 700; color: #EA580C; font-size: 1.25rem;">得分: 0</span>
+            </div>
+
+            <!-- 題目區域 -->
+            <div id="wordsQuizPrompt" style="text-align: center; margin: 20px 0 28px 0; min-height: 80px;"></div>
+
+            <!-- 四選一選項清單 -->
+            <div id="wordsQuizOptions"></div>
+
+            <!-- 及時反饋 -->
+            <div id="wordsQuizFeedback" class="quiz-feedback" style="text-align: center; min-height: 36px; font-weight: 700; font-size: 1.1rem; margin-top: 14px;"></div>
+
+            <div style="text-align: center; margin-top: 16px;">
+              <button class="btn-primary" id="wordsQuizNextBtn" style="display: none;">
+                <span>下一題 ➡️</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quiz 結算卡片 -->
+          <div class="words-quiz-card" id="quizResultCard" style="display: none; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 12px;">🎉</div>
+            <h3 id="quizResultTitle" style="font-family: var(--font-display); font-size: 2rem; color: #2D3142; margin-bottom: 8px;">
+              測驗大挑戰完成！
+            </h3>
+            <div style="font-size: 3.5rem; font-family: var(--font-display); font-weight: 700; color: #EA580C; margin: 12px 0;">
+              <span id="quizFinalScore">100</span> <span style="font-size: 1.5rem; color: #94A3B8;">分</span>
+            </div>
+            <p id="quizResultDesc" style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 24px;"></p>
+            <div style="display: flex; justify-content: center; gap: 14px;">
+              <button class="btn-primary" id="quizRestartBtn">
+                <span>🔄 再挑戰一次</span>
+              </button>
+              <button class="btn-secondary" onclick="window.wordsManager.switchMode('flashcards')">
+                <span>返回字卡複習 📚</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 子面板 4：1000 常用字大字典清單 -->
+      <div class="words-subpanel" id="words-panel-browser">
+        <div class="words-dict-grid" id="wordsDictionaryGrid"></div>
+      </div>
+
+      <!-- 角色視角專屬錦囊面板 -->
+      <div class="role-discussion-panel" style="margin-top: 36px;">
+        <div class="role-discussion-header">
+          <span style="font-size: 1.6rem;">💡</span>
+          <div>
+            <h4 style="font-family: var(--font-display); font-size: 1.2rem; color: #2D3142;">單字冒險島・學習導引對照</h4>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">針對兒童、家長與老師的三重視角專屬指引</div>
+          </div>
+        </div>
+        <div style="line-height: 1.8; color: #4B5563; font-size: 0.95rem; margin-top: 10px;">
+          <p><strong>🧒 兒童模式</strong>：每天翻閱 5~10 張字卡，跟著發音大聲讀，並在拼字練習中挑戰字母積木闖關！</p>
+          <p><strong>👨‍👩‍👧 家長模式</strong>：善用「❤️ 生字收藏」功能為孩子標記生疏單字，建議每天進行 15 分鐘的親子口語互動跟讀。</p>
+          <p><strong>👩‍🏫 老師模式</strong>：千字辭庫可依字母 A~Z 與 15+ 生活主題快速檢索，支援全班大螢幕投影聽寫練習與互動測驗競賽。</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= 模態框：榮譽成就徽章館 (Badges Modal) ================= -->
     <div class="modal-overlay" id="badgesModal" role="dialog" aria-modal="true" aria-labelledby="badgesModalTitle">
       <div class="modal-card">
@@ -593,6 +876,8 @@
   <script src="js/toys.js"></script>
   <script src="js/games.js"></script>
   <script src="js/knowledge.js"></script>
+  <script src="js/words-data.js"></script>
+  <script src="js/words.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
