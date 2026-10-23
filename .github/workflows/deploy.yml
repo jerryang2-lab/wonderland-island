@@ -1,0 +1,87 @@
+name: CI & Deploy
+
+# 觸發時機
+on:
+  push:
+    branches: [ main ]          # 主要分支
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # -------------------------------------------------
+  # 1️⃣ 先執行測試、建置與安全檢查
+  # -------------------------------------------------
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write            # 允許建立 tag
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ---------- 產生備份 tag ----------
+      - name: Create pre‑deploy tag
+        id: tag
+        run: |
+          TAG="pre-deploy-$(date +%Y%m%d%H%M%S)"
+          git tag $TAG
+          git push origin $TAG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---------- Node環境（若專案使用 npm） ----------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (ESLint) ✅
+        run: npm run lint
+
+      - name: Run unit / integration tests
+        run: npm test
+
+      # ---------- PowerShell 安全檢查 ----------
+      # 若建置工具是 PowerShell，使用 windows‑latest runner
+      - name: Run security verification (PowerShell)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          .\scripts\verify_security.ps1
+
+      # ---------- 建置靜態檔案 ----------
+      - name: Build website
+        run: |
+          # 若使用 npm 腳本
+          npm run build
+          # 或直接呼叫 PowerShell 建置腳本
+          # pwsh ./build_obfuscate.ps1
+
+      # ---------- 檢查產出是否有錯誤 ----------
+      - name: Verify build output
+        run: |
+          if [ ! -d "dist" ] && [ ! -d "public" ]; then
+            echo "⚠️ Build output not found!"
+            exit 1
+          fi
+
+      # -------------------------------------------------
+      # 2️⃣ 部署到 GitHub Pages
+      # -------------------------------------------------
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist          # 依實際輸出目錄調整
+          keep_files: false
+          force_orphan: true           # 重新建立 gh‑pages 分支
+          commit_message: "Deploy site @ ${{ github.sha }}"
+
+# -------------------------------------------------
+# 3️⃣ 若部署失敗，可手動回復至備份 tag
+# -------------------------------------------------
+# （此處僅提供說明，實作可自行加入「revert」job）
