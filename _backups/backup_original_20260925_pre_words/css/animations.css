@@ -1,0 +1,134 @@
+/* ==========================================================================
+   奇幻歡樂島 (Wonderland Island) - 童趣微動畫庫
+   ========================================================================== */
+
+/* 雲朵漂浮 */
+@keyframes floatCloud {
+  0% { transform: translateX(-150px); }
+  100% { transform: translateX(calc(100vw + 150px)); }
+}
+
+@keyframes floatCloudReverse {
+  0% { transform: translateX(calc(100vw + 150px)); }
+  100% { transform: translateX(-250px); }
+}
+
+/* 星星眨眼 */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+  50% { opacity: 0.95; transform: scale(1.25) rotate(15deg); }
+}
+
+/* 輕柔彈跳 */
+@keyframes bounceSoft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* 角色吉祥物懸浮 */
+@keyframes mascotHover {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+/* 登場彈出效果 */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) translateY(20px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 視圖切換放大 */
+@keyframes scaleUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 歡樂搖擺 (Wiggle) */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(5deg); }
+}
+
+/* 發光脈衝 */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 112, 166, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(255, 112, 166, 0);
+  }
+}
+
+/* 琴鍵震動水波 */
+@keyframes rippleEffect {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* 氣球飄起 */
+@keyframes floatUp {
+  0% {
+    transform: translateY(110%) rotate(-4deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(50%) rotate(4deg);
+  }
+  100% {
+    transform: translateY(-120%) rotate(-3deg);
+    opacity: 1;
+  }
+}
+
+/* 彩帶噴發微粒 */
+.confetti-particle {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 3px;
+  animation: confettiFall 2.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx, 50px), var(--ty, 500px)) rotate(720deg) scale(0.2);
+  }
+}
+
+/* 常用動態輔助類 */
+.anim-bounce {
+  animation: bounceSoft 2s ease-in-out infinite;
+}
+
+.anim-wiggle:hover {
+  animation: wiggle 0.6s ease-in-out;
+}
+
+.anim-pulse {
+  animation: pulseGlow 2s infinite;
+}

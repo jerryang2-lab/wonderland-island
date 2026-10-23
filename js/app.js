@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 奇幻歡樂島 (Wonderland Island) - 主應用協調器
  * 負責：角色模式切換、導航分頁、星星計數、成就徽章系統、彩帶微粒與護眼計時
  */
@@ -7,7 +7,7 @@ class AppManager {
   constructor() {
     this.currentRole = "kids"; // "kids", "parents", "teachers"
     this.activeTab = "lobby";
-    this.stars = parseInt(localStorage.getItem("wl_stars") || "10", 10);
+    this.stars = window.securityGuard ? window.securityGuard.secureGetItem("wl_stars", 10) : parseInt(localStorage.getItem("wl_stars") || "10", 10);
     this.badges = JSON.parse(localStorage.getItem("wl_badges") || "{}");
 
     // 護眼計時器（家長模式用）
@@ -164,7 +164,7 @@ class AppManager {
   // --------------------------------------------------------------------------
   addStars(amount) {
     this.stars += amount;
-    localStorage.setItem("wl_stars", this.stars);
+    if (window.securityGuard) { window.securityGuard.secureSetItem("wl_stars", this.stars); } else { localStorage.setItem("wl_stars", this.stars); }
     this.updateStarsDisplay();
   }
 
@@ -256,6 +256,19 @@ class AppManager {
         this.openDailyGift();
       });
     }
+    // Legal modal button binding
+    const openLegalBtn = document.getElementById("openLegalModalBtn");
+    if (openLegalBtn) {
+      openLegalBtn.addEventListener("click", () => this.openLegalModal());
+    }
+    const confirmLegalBtn = document.getElementById("confirmLegalBtn");
+    if (confirmLegalBtn) {
+      confirmLegalBtn.addEventListener("click", () => {
+        const modal = document.getElementById("legalModal");
+        if (modal) modal.classList.remove("active");
+        if (window.soundEngine) window.soundEngine.playPop();
+      });
+    }
   }
 
   openDailyGift() {
@@ -304,6 +317,12 @@ class AppManager {
 
   openEyeCareModal() {
     const modal = document.getElementById("eyeCareModal");
+    if (modal) modal.classList.add("active");
+  }
+
+  openLegalModal() {
+    if (window.soundEngine) window.soundEngine.playPop();
+    const modal = document.getElementById("legalModal");
     if (modal) modal.classList.add("active");
   }
 
