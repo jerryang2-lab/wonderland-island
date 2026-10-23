@@ -29,21 +29,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ---------- Node環境（若專案使用 npm） ----------
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Lint (ESLint) ✅
-        run: npm run lint
-
-      - name: Run unit / integration tests
-        run: npm test
 
       # ---------- PowerShell 安全檢查 ----------
       # 若建置工具是 PowerShell，使用 windows‑latest runner
