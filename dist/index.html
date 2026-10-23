@@ -1,0 +1,930 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>奇幻歡樂島 Wonderland Island | 兒童・家長・老師的童趣探索樂園</title>
+  <meta name="description" content="專為兒童、家長與老師打造的童趣快樂實驗性互動網站。涵蓋奇幻繪本故事島、音樂調色玩具箱、萌寵記憶小遊戲與萬物好奇小百科，具備多重視角切換與成就徽章獎勵。">
+    <!-- 憟劂甇⊥?撜?(Wonderland Island) - ??甈?摰?脰風?脫? -->
+  <!-- Copyright (c) 2026 Jerry Ang / Wonderland Island Team. All Rights Reserved. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com;">
+  <meta name="keywords" content="兒童網站, 親子共讀, 幼兒遊戲, STEAM教學, 互動繪本, 記憶翻牌, 塗鴉畫板">
+  
+  <!-- 設計樣式表 -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body data-role="kids">
+
+  <!-- 漂浮裝飾背景雲朵與星星 -->
+  <div class="bg-decorations" aria-hidden="true">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <span class="star-deco" style="top: 15%; left: 12%;">⭐</span>
+    <span class="star-deco" style="top: 25%; right: 15%; animation-delay: 1.2s;">✨</span>
+    <span class="star-deco" style="top: 60%; left: 8%; animation-delay: 0.7s;">🌟</span>
+    <span class="star-deco" style="top: 75%; right: 10%; animation-delay: 1.8s;">💫</span>
+  </div>
+
+  <div class="app-container">
+    <!-- ================= 頂部導航欄 (Top Header) ================= -->
+    <header class="top-header">
+      <div class="brand-logo" id="brandLogoBtn" onclick="window.appManager.switchTab('lobby')">
+        <div class="logo-icon">🎪</div>
+        <div>
+          <h1 class="brand-title">奇幻歡樂島</h1>
+          <div class="brand-subtitle">Wonderland Island</div>
+        </div>
+      </div>
+
+      <!-- 角色模式切換器 -->
+      <nav class="role-switcher-container" aria-label="角色切換選單">
+        <button class="role-btn active" data-role="kids" id="roleBtnKids" title="切換至兒童視角">
+          <span>🧒</span> 兒童模式
+        </button>
+        <button class="role-btn" data-role="parents" id="roleBtnParents" title="切換至家長視角">
+          <span>👨‍👩‍👧</span> 家長模式
+        </button>
+        <button class="role-btn" data-role="teachers" id="roleBtnTeachers" title="切換至老師視角">
+          <span>👩‍🏫</span> 老師模式
+        </button>
+      </nav>
+
+      <!-- 頂部快捷小工具 -->
+      <div class="header-actions">
+        <button class="action-pill-btn" id="headerBadgesBtn" title="查看我獲得的榮譽成就徽章">
+          <span>⭐</span>
+          <span id="headerStarCount">10</span>
+          <span>🏆 徽章</span>
+        </button>
+        <button class="action-icon-btn" id="headerSoundToggle" title="切換音效開關" aria-label="音效開關">
+          🔊
+        </button>
+      </div>
+    </header>
+
+    <!-- ================= 角色情境提示橫幅 (Role Banner) ================= -->
+    <section class="role-banner" id="roleBanner" aria-live="polite">
+      <div class="role-banner-content">
+        <div class="role-banner-icon" id="roleBannerIcon">🌟</div>
+        <div>
+          <div class="role-banner-title" id="roleBannerTitle">嗨！我是星寶！今天想要聽故事、玩鐵琴還是塗鴉呢？</div>
+          <div class="role-banner-desc" id="roleBannerDesc">點點卡片開啟冒險，收集滿滿的金色星星與榮譽徽章！</div>
+        </div>
+      </div>
+      <button class="role-banner-action" id="roleBannerAction">
+        🎁 開啟每日驚喜
+      </button>
+    </section>
+
+    <!-- ================= 主板塊導航 (Nav Tabs) ================= -->
+    <nav class="nav-tabs-wrapper" aria-label="主題導航">
+      <ul class="nav-tabs">
+        <li class="nav-tab-item">
+          <button class="nav-tab-btn active" data-tab="lobby" id="tabLobby">
+            <span class="tab-icon">🎪</span>
+            <span class="tab-label">歡樂大廳</span>
+          </button>
+        </li>
+        <li class="nav-tab-item">
+          <button class="nav-tab-btn" data-tab="story" id="tabStory">
+            <span class="tab-icon">📖</span>
+            <span class="tab-label">奇幻故事島</span>
+          </button>
+        </li>
+        <li class="nav-tab-item">
+          <button class="nav-tab-btn" data-tab="toys" id="tabToys">
+            <span class="tab-icon">🧸</span>
+            <span class="tab-label">魔法玩具箱</span>
+          </button>
+        </li>
+        <li class="nav-tab-item">
+          <button class="nav-tab-btn" data-tab="games" id="tabGames">
+            <span class="tab-icon">🎮</span>
+            <span class="tab-label">趣味遊樂場</span>
+          </button>
+        </li>
+        <li class="nav-tab-item">
+          <button class="nav-tab-btn" data-tab="knowledge" id="tabKnowledge">
+            <span class="tab-icon">💡</span>
+            <span class="tab-label">探索小百科</span>
+          </button>
+        </li>
+        <li class="nav-tab-item">
+          <button class="nav-tab-btn" data-tab="words" id="tabWords">
+            <span class="tab-icon">🔤</span>
+            <span class="tab-label">單字探險島</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- ================= 板塊 1：歡樂大廳 (Lobby) ================= -->
+    <main class="tab-panel active" id="panel-lobby">
+      <!-- 吉祥物與主題 Hero Banner -->
+      <section class="hero-card">
+        <div class="hero-text">
+          <div class="hero-badge">✨ 探索・想像・快樂學習</div>
+          <h2 class="hero-title">歡迎來到充滿驚喜的<br><span>奇幻歡樂島！</span></h2>
+          <p class="hero-desc">
+            這裡是專屬於孩子、爸爸媽媽和老師們的魔法花園。聽一聽溫暖的星光故事、用彩色鐵琴敲出美妙旋律，還能在遊樂場中挑戰記憶翻牌！
+          </p>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="window.appManager.switchTab('story')">
+              <span>📖 開啟今日繪本</span>
+            </button>
+            <button class="btn-primary" onclick="window.appManager.switchTab('words')" style="background: linear-gradient(135deg, #FF70A6, #FF9F1C);">
+              <span>🔤 1000常用單字島</span>
+            </button>
+            <button class="btn-secondary" onclick="window.appManager.switchTab('toys')">
+              <span>🧸 探索魔法玩具</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 動態吉祥物星寶 -->
+        <div class="hero-mascot-wrapper">
+          <div class="mascot-bubble">點點我！有驚喜哦 ✨</div>
+          <div class="mascot-avatar" id="heroMascot" title="我是島嶼守護者：星寶 (Starry)">
+            <div class="mascot-ears">
+              <div class="mascot-ear"></div>
+              <div class="mascot-ear"></div>
+            </div>
+            <div class="mascot-face">
+              <div class="mascot-eyes">
+                <div class="mascot-eye"></div>
+                <div class="mascot-eye"></div>
+              </div>
+              <div class="mascot-cheeks">
+                <div class="mascot-cheek"></div>
+                <div class="mascot-cheek"></div>
+              </div>
+              <div class="mascot-mouth"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 核心主題島嶼卡片 -->
+      <section class="grid-cards" aria-label="核心主題板塊">
+        <article class="feature-card" data-theme="words" id="cardWords" style="border: 2px solid rgba(255, 112, 166, 0.4);">
+          <div class="feature-card-icon" style="background: linear-gradient(135deg, #FF70A6, #FF9F1C);">🔤</div>
+          <h3 class="feature-card-title">單字探險島</h3>
+          <p class="feature-card-desc">1000 常用核心字彙！A~Z 字母 3D 字卡翻翻樂、字母拼字小練習，以及聽音測驗 Quiz 大挑戰！</p>
+          <div class="feature-card-cta">開始學習 <span>➡️</span></div>
+        </article>
+
+        <article class="feature-card" data-theme="story" id="cardStory">
+          <div class="feature-card-icon">📖</div>
+          <h3 class="feature-card-title">奇幻故事島</h3>
+          <p class="feature-card-desc">原創多頁有聲繪本《星光小熊的彩虹冒險》，點擊角色觸發驚喜音效，附贈家長共讀錦囊與教師教案提綱。</p>
+          <div class="feature-card-cta">前往聆聽 <span>➡️</span></div>
+        </article>
+
+        <article class="feature-card" data-theme="toys" id="cardToys">
+          <div class="feature-card-icon">🧸</div>
+          <h3 class="feature-card-title">魔法玩具箱</h3>
+          <p class="feature-card-desc">8 音彩色敲擊鐵琴演奏《小星星》、神奇三原色調配召喚奇幻精靈，以及有趣的環保紙箱玩具創客工坊。</p>
+          <div class="feature-card-cta">進入體驗 <span>➡️</span></div>
+        </article>
+
+        <article class="feature-card" data-theme="games" id="cardGames">
+          <div class="feature-card-icon">🎮</div>
+          <h3 class="feature-card-title">趣味遊樂場</h3>
+          <p class="feature-card-desc">可愛動物 3D 記憶翻牌、歡樂戳氣球消除遊戲，以及支援彩虹炫彩筆刷與可愛貼紙的自由塗鴉小畫板！</p>
+          <div class="feature-card-cta">開始暢玩 <span>➡️</span></div>
+        </article>
+
+        <article class="feature-card" data-theme="knowledge" id="cardKnowledge">
+          <div class="feature-card-icon">💡</div>
+          <h3 class="feature-card-title">探索小百科</h3>
+          <p class="feature-card-desc">萬物為什麼 3D 翻翻卡（天空、斑馬、植物的秘密），以及即時答題闖關賺取金色星星與獎牌挑戰！</p>
+          <div class="feature-card-cta">探索新知 <span>➡️</span></div>
+        </article>
+      </section>
+
+      <!-- 每日開箱幸運小禮 -->
+      <section class="daily-box-card">
+        <div class="daily-box-info">
+          <div class="daily-gift-box" id="dailyGiftBox" title="點擊開箱">🎁</div>
+          <div>
+            <h3 style="font-size: 1.3rem; margin-bottom: 4px;">每日歡樂驚喜禮物盒</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">每天來島上報到，點擊打開禮物盒即可免費獲得 5 顆閃亮金色小星星！</p>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="window.appManager.openDailyGift()">
+          <span>點我立即開箱</span>
+        </button>
+      </section>
+    </main>
+
+    <!-- ================= 板塊 2：奇幻故事島 (Story Island) ================= -->
+    <section class="tab-panel" id="panel-story">
+      <div class="story-wrapper">
+        <div class="story-header">
+          <div class="story-badge-title">
+            <span style="font-size: 2rem;">📖</span>
+            <div>
+              <h2>奇幻故事島</h2>
+              <div style="font-size: 0.88rem; color: var(--text-muted);">本期精選繪本：《星光小熊的彩虹冒險》</div>
+            </div>
+          </div>
+          <div class="story-controls">
+            <button class="btn-secondary" id="storyReadBtn" title="朗讀整段故事">
+              <span>伴讀發音</span> 🔊
+            </button>
+            <button class="btn-secondary" id="storyPrevBtn" title="上一頁">
+              <span>上一頁</span> ⬅️
+            </button>
+            <button class="btn-primary" id="storyNextBtn" title="下一頁">
+              <span>下一頁</span> ➡️
+            </button>
+          </div>
+        </div>
+
+        <!-- 故事展示雙欄舞台 -->
+        <div class="story-stage">
+          <!-- 左側：點擊互動插畫舞台 -->
+          <div class="story-illustration-stage" id="storyIllustrationStage">
+            <!-- 內容由 story.js 動態渲染 -->
+          </div>
+
+          <!-- 右側：故事內文與頁碼 -->
+          <div class="story-text-container">
+            <div>
+              <div class="story-page-indicator" id="storyPageIndicator">第 1 / 4 頁</div>
+              <h3 id="storyPageTitle" style="font-size: 1.6rem; color: #2D3142; margin-top: 8px;">星夜啟程</h3>
+              <p class="story-paragraph" id="storyParagraph">
+                在軟綿綿的棉花糖雲朵上，住著一隻戴著睡帽的星光小熊波波...
+              </p>
+            </div>
+            <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 16px;">
+              💡 溫馨提示：點擊左側插畫中的角色（小熊、雲朵、小青蛙），會發出驚喜聲音與小彩蛋哦！
+            </div>
+          </div>
+        </div>
+
+        <!-- 角色專屬教學與共讀抽屜 -->
+        <div class="role-discussion-panel" id="roleDiscussionPanel">
+          <div class="role-discussion-title">
+            <span>💬 專屬陪伴與教案導引</span>
+          </div>
+          <ul class="role-discussion-list">
+            <li id="storyParentTips">💡 親子互動指南：引導孩子抬頭看看天空，詢問孩子最想去雲朵上玩什麼玩具？</li>
+            <li id="storyTeacherTips">🎯 教學目標連結：自然領域素養－引導幼兒探索黑夜、星星與雲朵的自然現象。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 板塊 3：魔法玩具箱 (Magic Toybox) ================= -->
+    <section class="tab-panel" id="panel-toys">
+      <div class="toybox-grid">
+        <!-- 玩具 1：8 音彩色敲擊鐵琴 -->
+        <div class="toy-card">
+          <div class="toy-title-bar">
+            <h3><span>🎵</span> 魔法歡樂鐵琴 (Musical Xylophone)</h3>
+            <button class="btn-secondary" id="xyloDemoBtn">
+              <span>示範演奏《小星星》</span> 🌟
+            </button>
+          </div>
+          <p style="color: var(--text-muted); margin-bottom: 16px;">
+            點擊或敲擊琴鍵（支援鍵盤數字鍵 1 ~ 8），以 Web Audio 即時合成清脆的樂音！
+          </p>
+
+          <div class="xylophone-container">
+            <button class="xylo-key" data-note="C4" title="Do (按鍵 1)">
+              <div class="xylo-hole"></div>
+              <div class="xylo-note-label">C</div>
+              <div class="xylo-key-hint">Do (1)</div>
+              <div class="xylo-hole"></div>
+            </button>
+            <button class="xylo-key" data-note="D4" title="Re (按鍵 2)">
+              <div class="xylo-hole"></div>
+              <div class="xylo-note-label">D</div>
+              <div class="xylo-key-hint">Re (2)</div>
+              <div class="xylo-hole"></div>
+            </button>
+            <button class="xylo-key" data-note="E4" title="Mi (按鍵 3)">
+              <div class="xylo-hole"></div>
+              <div class="xylo-note-label">E</div>
+              <div class="xylo-key-hint">Mi (3)</div>
+              <div class="xylo-hole"></div>
+            </button>
+            <button class="xylo-key" data-note="F4" title="Fa (按鍵 4)">
+              <div class="xylo-hole"></div>
+              <div class="xylo-note-label">F</div>
+              <div class="xylo-key-hint">Fa (4)</div>
+              <div class="xylo-hole"></div>
+            </button>
+            <button class="xylo-key" data-note="G4" title="Sol (按鍵 5)">
+              <div class="xylo-hole"></div>
+              <div class="xylo-note-label">G</div>
+              <div class="xylo-key-hint">Sol (5)</div>
+              <div class="xylo-hole"></div>
+            </button>
+            <button class="xylo-key" data-note="A4" title="La (按鍵 6)">
+              <div class="xylo-hole"></div>
+              <div class="xylo-note-label">A</div>
+              <div class="xylo-key-hint">La (6)</div>
+              <div class="xylo-hole"></div>
+            </button>
+            <button class="xylo-key" data-note="B4" title="Si (按鍵 7)">
+              <div class="xylo-hole"></div>
+              <div class="xylo-note-label">B</div>
+              <div class="xylo-key-hint">Si (7)</div>
+              <div class="xylo-hole"></div>
+            </button>
+            <button class="xylo-key" data-note="C5" title="高音 Do (按鍵 8)">
+              <div class="xylo-hole"></div>
+              <div class="xylo-note-label">C'</div>
+              <div class="xylo-key-hint">Do↑ (8)</div>
+              <div class="xylo-hole"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 玩具 2：神奇調色魔法實驗室 -->
+        <div class="toy-card">
+          <div class="toy-title-bar">
+            <h3><span>🧪</span> 神奇調色魔法實驗室 (Color Alchemy)</h3>
+            <button class="btn-secondary" id="alchemyResetBtn">
+              <span>清空大鍋</span> 🔄
+            </button>
+          </div>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">
+            點擊加入三原色藥水（紅、黃、藍），觀察大鍋裡混合發生的奇妙化學反應，召喚出傳奇小精靈！
+          </p>
+
+          <div class="alchemy-stage">
+            <!-- 顏色藥水燒瓶 -->
+            <div class="color-flask-group">
+              <div class="color-flask flask-red" data-color="red" title="加入紅色藥水">紅 Red</div>
+              <div class="color-flask flask-yellow" data-color="yellow" title="加入黃色藥水">黃 Yellow</div>
+              <div class="color-flask flask-blue" data-color="blue" title="加入藍色藥水">藍 Blue</div>
+            </div>
+
+            <!-- 魔法大鍋 -->
+            <div class="alchemy-cauldron">
+              <div class="cauldron-liquid" id="cauldronLiquid">✨</div>
+            </div>
+
+            <!-- 召喚合成結果說明 -->
+            <div class="alchemy-result-box">
+              <h4 id="alchemyResultTitle" style="font-size: 1.2rem; color: #7E22CE; margin-bottom: 6px;">魔法大鍋等待中</h4>
+              <p id="alchemyResultDesc" style="font-size: 0.9rem; color: #4B5563;">請點擊左側燒瓶注入色彩～</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 玩具 3：創客 DIY 環保手作指南 -->
+        <div class="toy-card">
+          <div class="toy-title-bar">
+            <h3><span>✂️</span> 親子創客手作圖鑑 (Cardboard DIY Maker)</h3>
+          </div>
+          <div class="grid-cards" style="margin-bottom: 0;">
+            <div class="diy-guide-card" style="background: #F8FAFC; border: 2px solid #E2E8F0; border-radius: var(--border-radius-md); padding: 20px; cursor: pointer;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">📦</div>
+              <h4 style="font-size: 1.15rem; margin-bottom: 6px;">紙箱彈珠迷宮台</h4>
+              <p style="font-size: 0.85rem; color: #64748B;">材料：廢紙箱、吸管、熱熔膠、彈珠。引導孩子設計曲折迷宮，鍛鍊空間與平衡感！</p>
+            </div>
+            <div class="diy-guide-card" style="background: #F8FAFC; border: 2px solid #E2E8F0; border-radius: var(--border-radius-md); padding: 20px; cursor: pointer;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🚀</div>
+              <h4 style="font-size: 1.15rem; margin-bottom: 6px;">吸管吹氣衝天火箭</h4>
+              <p style="font-size: 0.85rem; color: #64748B;">材料：粗吸管、細吸管、色紙。透過深呼吸一口氣吹射，寓教於樂體會空氣推進力！</p>
+            </div>
+            <div class="diy-guide-card" style="background: #F8FAFC; border: 2px solid #E2E8F0; border-radius: var(--border-radius-md); padding: 20px; cursor: pointer;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🌀</div>
+              <h4 style="font-size: 1.15rem; margin-bottom: 6px;">轉轉夢幻萬花筒</h4>
+              <p style="font-size: 0.85rem; color: #64748B;">材料：紙筒、塑膠鏡片、彩色亮片。轉動間看見對稱幾何幾何光學之美！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 板塊 4：趣味遊樂場 (Games Playground) ================= -->
+    <section class="tab-panel" id="panel-games">
+      <!-- 遊樂場子導航 -->
+      <nav class="games-subnav">
+        <button class="game-subnav-btn active" data-subgame="memory">
+          <span>🦁</span> 萌萌動物記憶翻牌
+        </button>
+        <button class="game-subnav-btn" data-subgame="balloon">
+          <span>🎈</span> 快樂氣球消消樂
+        </button>
+        <button class="game-subnav-btn" data-subgame="canvas">
+          <span>🎨</span> 彩虹魔法小畫板
+        </button>
+      </nav>
+
+      <div class="game-arena">
+        <!-- 1. 記憶翻牌遊戲 -->
+        <div id="subgameMemory">
+          <div class="memory-stats-bar">
+            <div>
+              <span>⏳ 遊戲時間：</span>
+              <span id="memoryTimerText" style="color: var(--primary-mint);">0 秒</span>
+            </div>
+            <div>
+              <span>👆 翻牌次數：</span>
+              <span id="memoryFlipsText" style="color: var(--primary-pink);">0 次</span>
+            </div>
+            <button class="btn-secondary" id="memoryResetBtn">
+              <span>重新洗牌</span> 🔀
+            </button>
+          </div>
+          <div class="memory-grid" id="memoryGrid">
+            <!-- 由 games.js 渲染 12 張卡牌 -->
+          </div>
+        </div>
+
+        <!-- 2. 氣球消消樂遊戲 -->
+        <div id="subgameBalloon" style="display: none;">
+          <div class="memory-stats-bar">
+            <div>
+              <span>🎯 目前得分：</span>
+              <span id="balloonScoreText" style="color: var(--primary-blue); font-size: 1.4rem;">0</span>
+            </div>
+            <button class="btn-primary" id="balloonToggleBtn">
+              <span>開始戳氣球</span> 🎈
+            </button>
+          </div>
+          <div class="balloon-stage" id="balloonStage">
+            <!-- 氣球動態浮現 -->
+          </div>
+          <p style="text-align: center; color: var(--text-muted); font-size: 0.88rem; margin-top: 10px;">
+            👆 快速點擊飄起來的彩色氣球，分數達到 100 分可解鎖「戳戳神射手」徽章！
+          </p>
+        </div>
+
+        <!-- 3. 彩虹塗鴉小畫板 -->
+        <div id="subgameCanvas" style="display: none;">
+          <div class="canvas-container">
+            <div class="canvas-toolbar">
+              <!-- 色票 -->
+              <span style="font-weight: 700; font-size: 0.9rem;">顏色：</span>
+              <div class="color-swatch active" style="background: #FF70A6;" data-color="#FF70A6" title="粉紅"></div>
+              <div class="color-swatch" style="background: #EF4444;" data-color="#EF4444" title="紅色"></div>
+              <div class="color-swatch" style="background: #F59E0B;" data-color="#F59E0B" title="橙色"></div>
+              <div class="color-swatch" style="background: #10B981;" data-color="#10B981" title="綠色"></div>
+              <div class="color-swatch" style="background: #3B82F6;" data-color="#3B82F6" title="藍色"></div>
+              <div class="color-swatch" style="background: #8B5CF6;" data-color="#8B5CF6" title="紫色"></div>
+              <div class="color-swatch" style="background: #1F2937;" data-color="#1F2937" title="黑色"></div>
+              <div class="color-swatch" style="background: linear-gradient(135deg, red, orange, yellow, green, blue, purple);" data-color="rainbow" title="🌈 彩虹魔法筆刷"></div>
+
+              <!-- 筆刷大小 -->
+              <label for="brushSizeRange" style="margin-left: 10px; font-weight: 700; font-size: 0.9rem;">粗細：</label>
+              <input type="range" id="brushSizeRange" min="3" max="28" value="8" style="cursor: pointer; width: 80px;">
+
+              <!-- 工具按鈕 -->
+              <button class="btn-secondary" id="canvasEraserBtn" style="padding: 6px 14px; font-size: 0.88rem;">橡皮擦 🧹</button>
+              <button class="btn-secondary" id="canvasClearBtn" style="padding: 6px 14px; font-size: 0.88rem;">清除 🧽</button>
+              <button class="btn-primary" id="canvasDownloadBtn" style="padding: 6px 16px; font-size: 0.88rem;">保存作品 💾</button>
+            </div>
+
+            <!-- 印章貼紙選擇 -->
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span style="font-weight: 700; font-size: 0.9rem;">可愛印章：</span>
+              <button class="btn-secondary stamp-btn" data-stamp="⭐" style="padding: 4px 10px;">⭐ 星星</button>
+              <button class="btn-secondary stamp-btn" data-stamp="💖" style="padding: 4px 10px;">💖 愛心</button>
+              <button class="btn-secondary stamp-btn" data-stamp="🌸" style="padding: 4px 10px;">🌸 櫻花</button>
+              <button class="btn-secondary stamp-btn" data-stamp="🐻" style="padding: 4px 10px;">🐻 小熊</button>
+              <button class="btn-secondary stamp-btn" data-stamp="🚀" style="padding: 4px 10px;">🚀 火箭</button>
+              <button class="btn-secondary stamp-btn" data-stamp="🌈" style="padding: 4px 10px;">🌈 彩虹</button>
+            </div>
+
+            <!-- 畫布主體 -->
+            <canvas id="drawingCanvas" width="680" height="400"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 板塊 5：探索小百科 (Wonder Knowledge) ================= -->
+    <section class="tab-panel" id="panel-knowledge">
+      <div style="text-align: center; margin-bottom: 28px;">
+        <h2 style="font-family: var(--font-display); font-size: 2rem; color: #2D3142;">萬物為什麼・探索小百科 💡</h2>
+        <p style="color: var(--text-muted); font-size: 1rem;">輕輕點擊卡片，翻轉揭曉大自然的奧秘與小秘密！</p>
+      </div>
+
+      <!-- 萬物為什麼 3D 翻翻卡網格 -->
+      <div class="knowledge-grid" id="wonderCardsGrid">
+        <!-- 由 knowledge.js 渲染 6 張卡片 -->
+      </div>
+
+      <!-- 益智即時小挑戰 -->
+      <div class="quiz-card" id="quizCard">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: #118AB2;">
+            <span>🏆</span> 益智小問答大挑戰
+          </h3>
+          <span id="quizProgressText" style="font-weight: 700; color: #0284C7;">第 1 / 3 題</span>
+        </div>
+
+        <div id="quizQuestionText" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #1F2937;">
+          題目載入中...
+        </div>
+
+        <div class="quiz-options" id="quizOptionsContainer">
+          <!-- 選項由 knowledge.js 渲染 -->
+        </div>
+
+        <div id="quizFeedbackText" style="font-weight: 700; margin: 12px 0; min-height: 28px;"></div>
+
+        <button class="btn-secondary" id="quizRestartBtn" style="display: none; margin-top: 10px;">
+          <span>再挑戰一次</span> 🔄
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= 板塊 6：字母單字探險島 (Words Island - 1000 常用字) ================= -->
+    <section class="tab-panel" id="panel-words">
+      <!-- 頂部 Hero 導引卡片 -->
+      <div class="hero-card" style="margin-bottom: 24px; background: linear-gradient(135deg, #FFF0F5 0%, #FFFBEB 50%, #F0FDF4 100%);">
+        <div class="hero-text">
+          <div class="hero-badge" style="background: rgba(255, 112, 166, 0.15); color: #BE123C;">🔤 1000 常用核心字彙樂園</div>
+          <h2 class="hero-title">字母單字<span>探險島</span></h2>
+          <p class="hero-desc">
+            A~Z 常用千字輕鬆學！翻轉 3D 單字卡聆聽地道發音、在字母打字機上動手拼字，還能挑戰緊張刺激的看字選中與聽音辨字 Quiz 大挑戰！
+          </p>
+        </div>
+        <div style="text-align: center; min-width: 140px;">
+          <div style="font-size: 4.5rem; animation: floatSlow 3s ease-in-out infinite;">🔤</div>
+          <div style="font-weight: 700; color: #118AB2; font-size: 0.95rem;">A 到 Z 快樂開口說</div>
+        </div>
+      </div>
+
+      <!-- 微型學習數據看板 -->
+      <div class="words-stats-banner">
+        <div class="words-stat-item">
+          <div class="words-stat-value" id="statsLearnedCount">0</div>
+          <div class="words-stat-label">📖 探索次數</div>
+        </div>
+        <div class="words-stat-item">
+          <div class="words-stat-value" id="statsFavCount">0</div>
+          <div class="words-stat-label">❤️ 收藏生字</div>
+        </div>
+        <div class="words-stat-item">
+          <div class="words-stat-value" id="statsBestScore">0 分</div>
+          <div class="words-stat-label">🏆 測驗最佳紀錄</div>
+        </div>
+      </div>
+
+      <!-- 四大子模式切換按鈕 -->
+      <nav class="words-mode-nav" aria-label="單字島功能選單">
+        <button class="words-mode-tab-btn active" data-mode="flashcards">
+          <span>🃏</span> 字卡翻翻樂
+        </button>
+        <button class="words-mode-tab-btn" data-mode="spelling">
+          <span>🧩</span> 拼字小練習
+        </button>
+        <button class="words-mode-tab-btn" data-mode="quiz">
+          <span>🏆</span> 測驗大挑戰 (Quiz)
+        </button>
+        <button class="words-mode-tab-btn" data-mode="browser">
+          <span>📚</span> 1000 字大字典
+        </button>
+      </nav>
+
+      <!-- 萬能檢索與篩選器 (A-Z 與 15+ 生活主題) -->
+      <div class="words-filter-container">
+        <div class="words-search-row">
+          <div class="words-search-box">
+            <span class="words-search-icon">🔍</span>
+            <input type="text" class="words-search-input" id="wordsSearchInput" placeholder="搜尋英文單字或中文釋義 (例如: apple, 貓咪, 學校)...">
+          </div>
+          <div class="words-result-badge" id="wordsResultCount">共 1039 個單字</div>
+        </div>
+
+        <!-- A-Z 字母列 -->
+        <div class="alphabet-scroll-bar" id="wordsAlphabetBar">
+          <!-- 由 words.js 渲染 -->
+        </div>
+
+        <!-- 主題情境分類藥丸列 -->
+        <div class="category-filter-bar" id="wordsCategoryFilter">
+          <!-- 由 words.js 渲染 -->
+        </div>
+      </div>
+
+      <!-- 子面板 1：3D 字卡翻翻樂 -->
+      <div class="words-subpanel active" id="words-panel-flashcards">
+        <div class="flashcard-stage">
+          <div class="flashcard-3d-wrap" id="flashcardElement" title="點擊卡片翻轉正面/背面">
+            <!-- 正面 -->
+            <div class="flashcard-front">
+              <div class="flashcard-header">
+                <span class="card-tag" id="cardLetterTag">Letter A</span>
+                <span class="card-hint-pill">👆 點擊卡片翻面看中文</span>
+                <button class="card-fav-btn" id="cardFavBtn" title="收藏至生字本">🤍</button>
+              </div>
+              <div class="card-body-main">
+                <div class="card-emoji-icon" id="cardIconEmoji">🍎</div>
+                <div class="card-word-title" id="cardWordText">apple</div>
+                <div class="card-phonetic-text" id="cardPhoneticText">n. /ˈæpl/</div>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button class="card-action-pill" id="cardSpeakBtn" title="朗讀單字發音">
+                  <span>🔊 發音跟讀</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 背面 -->
+            <div class="flashcard-back">
+              <div class="flashcard-header">
+                <span class="card-tag" id="cardCategoryBadge" style="background: #DCFCE7; color: #15803D;">美味食物</span>
+                <span class="card-hint-pill">👆 點擊翻回正面</span>
+                <div style="font-size: 1.5rem;">✨</div>
+              </div>
+              <div class="card-body-main" style="width: 100%;">
+                <div class="card-zh-title" id="cardZhText">蘋果</div>
+                <div class="card-example-box">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #0284C7;">生活實用例句</span>
+                    <button style="border: none; background: transparent; cursor: pointer; font-size: 1rem;" onclick="window.wordsManager.speakCurrentExample()" title="朗讀例句">🔊</button>
+                  </div>
+                  <div class="card-example-en" id="cardExampleEn">An apple a day keeps the doctor away.</div>
+                  <div class="card-example-zh" id="cardExampleZh">一天一蘋果，醫生遠離我。</div>
+                </div>
+              </div>
+              <div style="font-size: 0.82rem; color: #94A3B8;">🌟 記得多大聲跟讀幾次，加深發音記憶喔！</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 字卡導航控制列 -->
+        <div class="flashcard-controls">
+          <button class="card-ctrl-btn" id="cardPrevBtn" title="上一個單字">⬅️</button>
+          <span id="cardProgressText" style="font-family: var(--font-display); font-weight: 700; color: #64748B;">1 / 1039</span>
+          <button class="card-ctrl-btn" id="cardNextBtn" title="下一個單字">➡️</button>
+          <button class="card-action-pill" id="cardRandomBtn" title="隨機挑選單字">
+            <span>🎲 隨機跳轉</span>
+          </button>
+          <button class="card-action-pill" id="cardAutoPlayBtn" title="自動翻卡與朗讀">
+            <span>▶️ 自動翻讀</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 子面板 2：字母拼字魔法打字機 -->
+      <div class="words-subpanel" id="words-panel-spelling">
+        <div class="spell-stage">
+          <div class="spell-hint-card">
+            <div class="spell-hint-icon" id="spellHintIcon">🍎</div>
+            <div>
+              <div class="spell-hint-zh" id="spellHintZh">蘋果</div>
+              <div style="font-size: 0.95rem; color: #64748B;" id="spellHintPos">n. • 美味食物</div>
+            </div>
+            <button class="btn-secondary" id="spellSpeakBtn" style="margin-left: auto; border-radius: 9999px;">
+              <span>聽發音</span> 🔊
+            </button>
+          </div>
+
+          <div style="font-size: 0.95rem; color: #64748B; margin-bottom: 12px;">
+            請依照正確順序點選下方的字母積木，拼出正確單字：
+          </div>
+
+          <!-- 拼字槽位 -->
+          <div class="spell-slots-wrapper" id="spellSlotsContainer"></div>
+
+          <!-- 打散的字母積木池 -->
+          <div class="spell-tiles-wrapper" id="spellTilesContainer"></div>
+
+          <!-- 反饋文字 -->
+          <div class="spell-feedback" id="spellFeedback"></div>
+
+          <!-- 輔助操作按鈕 -->
+          <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button class="btn-secondary" id="spellUndoBtn">
+              <span>↩️ 撤銷最後字母</span>
+            </button>
+            <button class="btn-secondary" id="spellHintBtn">
+              <span>💡 提示下個字母</span>
+            </button>
+            <button class="btn-primary" id="spellNextBtn">
+              <span>換一題 ➡️</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 子面板 3：單字測驗大挑戰 (Quiz) -->
+      <div class="words-subpanel" id="words-panel-quiz">
+        <div class="words-quiz-stage">
+          <!-- Quiz 模式引導卡 -->
+          <div class="words-quiz-card" id="quizIntroCard" style="text-align: center;">
+            <div style="font-size: 3.8rem; margin-bottom: 12px;">🏆</div>
+            <h3 style="font-family: var(--font-display); font-size: 2rem; color: #2D3142; margin-bottom: 10px;">
+              常用單字益智挑戰 Quiz
+            </h3>
+            <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 24px;">
+              每次挑戰包含 10 道精選題目，連對享有加分 Combo！挑戰滿分贏取金色小星星與「單字智多星」榮譽徽章！
+            </p>
+            <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+              <button class="btn-primary start-quiz-btn" data-quiz-type="en-to-zh">
+                <span>🔤 英翻中挑戰 (看英文選中文)</span>
+              </button>
+              <button class="btn-secondary start-quiz-btn" data-quiz-type="zh-to-en">
+                <span>🇹🇼 中翻英挑戰 (看中文選英文)</span>
+              </button>
+              <button class="btn-primary start-quiz-btn" data-quiz-type="listening" style="background: linear-gradient(135deg, #118AB2, #06D6A0);">
+                <span>🎧 聽音辨字考驗 (聽發音選單字)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quiz 答題區 -->
+          <div class="words-quiz-card" id="quizPlayArea" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <span id="wordsQuizProgress" style="font-weight: 700; color: #0284C7; font-size: 1.1rem;">第 1 / 10 題</span>
+              <button id="wordsQuizAudioBtn" class="action-pill-btn" style="padding: 6px 14px; font-size: 0.95rem;">
+                <span>🔊 重新聽發音</span>
+              </button>
+              <span id="wordsQuizScore" style="font-family: var(--font-display); font-weight: 700; color: #EA580C; font-size: 1.25rem;">得分: 0</span>
+            </div>
+
+            <!-- 題目區域 -->
+            <div id="wordsQuizPrompt" style="text-align: center; margin: 20px 0 28px 0; min-height: 80px;"></div>
+
+            <!-- 四選一選項清單 -->
+            <div id="wordsQuizOptions"></div>
+
+            <!-- 及時反饋 -->
+            <div id="wordsQuizFeedback" class="quiz-feedback" style="text-align: center; min-height: 36px; font-weight: 700; font-size: 1.1rem; margin-top: 14px;"></div>
+
+            <div style="text-align: center; margin-top: 16px;">
+              <button class="btn-primary" id="wordsQuizNextBtn" style="display: none;">
+                <span>下一題 ➡️</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quiz 結算卡片 -->
+          <div class="words-quiz-card" id="quizResultCard" style="display: none; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 12px;">🎉</div>
+            <h3 id="quizResultTitle" style="font-family: var(--font-display); font-size: 2rem; color: #2D3142; margin-bottom: 8px;">
+              測驗大挑戰完成！
+            </h3>
+            <div style="font-size: 3.5rem; font-family: var(--font-display); font-weight: 700; color: #EA580C; margin: 12px 0;">
+              <span id="quizFinalScore">100</span> <span style="font-size: 1.5rem; color: #94A3B8;">分</span>
+            </div>
+            <p id="quizResultDesc" style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 24px;"></p>
+            <div style="display: flex; justify-content: center; gap: 14px;">
+              <button class="btn-primary" id="quizRestartBtn">
+                <span>🔄 再挑戰一次</span>
+              </button>
+              <button class="btn-secondary" onclick="window.wordsManager.switchMode('flashcards')">
+                <span>返回字卡複習 📚</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 子面板 4：1000 常用字大字典清單 -->
+      <div class="words-subpanel" id="words-panel-browser">
+        <div class="words-dict-grid" id="wordsDictionaryGrid"></div>
+      </div>
+
+      <!-- 角色視角專屬錦囊面板 -->
+      <div class="role-discussion-panel" style="margin-top: 36px;">
+        <div class="role-discussion-header">
+          <span style="font-size: 1.6rem;">💡</span>
+          <div>
+            <h4 style="font-family: var(--font-display); font-size: 1.2rem; color: #2D3142;">單字冒險島・學習導引對照</h4>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">針對兒童、家長與老師的三重視角專屬指引</div>
+          </div>
+        </div>
+        <div style="line-height: 1.8; color: #4B5563; font-size: 0.95rem; margin-top: 10px;">
+          <p><strong>🧒 兒童模式</strong>：每天翻閱 5~10 張字卡，跟著發音大聲讀，並在拼字練習中挑戰字母積木闖關！</p>
+          <p><strong>👨‍👩‍👧 家長模式</strong>：善用「❤️ 生字收藏」功能為孩子標記生疏單字，建議每天進行 15 分鐘的親子口語互動跟讀。</p>
+          <p><strong>👩‍🏫 老師模式</strong>：千字辭庫可依字母 A~Z 與 15+ 生活主題快速檢索，支援全班大螢幕投影聽寫練習與互動測驗競賽。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 模態框：榮譽成就徽章館 (Badges Modal) ================= -->
+    <div class="modal-overlay" id="badgesModal" role="dialog" aria-modal="true" aria-labelledby="badgesModalTitle">
+      <div class="modal-card">
+        <button class="modal-close-btn" aria-label="關閉">✕</button>
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div style="font-size: 3rem; margin-bottom: 8px;">🏆</div>
+          <h3 id="badgesModalTitle" style="font-family: var(--font-display); font-size: 1.8rem; color: #2D3142;">
+            榮譽成就徽章館
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            在島嶼各處探索、聆聽繪本與遊玩小遊戲，即可解鎖專屬徽章與星星獎勵！
+          </p>
+        </div>
+        <div class="badges-grid" id="badgesListContainer">
+          <!-- 由 app.js 渲染各徽章 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 模態框：家長護眼提醒 (Eye Care Modal) ================= -->
+    <div class="modal-overlay" id="eyeCareModal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <button class="modal-close-btn" aria-label="關閉">✕</button>
+        <div style="text-align: center; margin-bottom: 16px;">
+          <div style="font-size: 3rem; margin-bottom: 8px;">👀</div>
+          <h3 style="font-family: var(--font-display); font-size: 1.6rem; color: var(--primary-blue);">
+            護眼健康與共讀時間指引
+          </h3>
+        </div>
+        <div style="line-height: 1.8; color: #4B5563; font-size: 0.95rem;">
+          <p><strong>🕒 20-20-20 護眼原則：</strong></p>
+          <p>每使用螢幕 20 分鐘，請引導孩子抬頭看向 20 英尺（約 6 公尺）外的遠方綠色景物，放鬆眨眼 20 秒鐘。</p>
+          <hr style="margin: 14px 0; border: none; border-top: 1px dashed #E2E8F0;">
+          <p><strong>💬 優質親子陪伴建議：</strong></p>
+          <ul style="padding-left: 20px; margin-top: 6px;">
+            <li>繪本島共讀時，多採用「開放式提問」而非對錯式質問。</li>
+            <li>鼓勵孩子在塗鴉畫板上表達今天的心情，並聆聽孩子的創作故事。</li>
+            <li>每日螢幕互動時間建議幼兒不超過 30~40 分鐘。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+        <!-- ================= 頁尾版權與法律宣告 (Site Footer) ================= -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        <p class="footer-title">© 2026 奇幻歡樂島 Wonderland Island. All Rights Reserved.</p>
+        <p class="footer-subtext">本網站之一切程式代碼、視覺設計、1000 常用單字資料庫與多媒體資產均受智慧財產權與著作權法保護。</p>
+        <button class="footer-legal-btn" id="openLegalModalBtn" aria-label="閱讀完整版權與法律聲明">
+          📜 閱讀完整版權與法律聲明
+        </button>
+      </div>
+    </footer>
+
+
+<!-- ================= 模態框：老師 STEAM 素養指引 (Curriculum Modal) ================= -->
+    <div class="modal-overlay" id="curriculumModal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <button class="modal-close-btn" aria-label="關閉">✕</button>
+        <div style="text-align: center; margin-bottom: 16px;">
+          <div style="font-size: 3rem; margin-bottom: 8px;">📋</div>
+          <h3 style="font-family: var(--font-display); font-size: 1.6rem; color: var(--primary-mint);">
+            STEAM 核心素養教學指引對照
+          </h3>
+        </div>
+        <div style="line-height: 1.8; color: #4B5563; font-size: 0.95rem;">
+          <p><strong>🎯 跨領域整合目標：</strong></p>
+          <ul style="padding-left: 20px; margin-top: 6px;">
+            <li><strong>Science (科學)</strong>：光學折射（彩虹成因）、散射現象、植物生理時鐘。</li>
+            <li><strong>Technology (科技)</strong>：音訊合成、人機語音互動、數位畫布工具體驗。</li>
+            <li><strong>Engineering (工程)</strong>：紙箱彈珠迷宮、吸管吹氣火箭等 DIY 創客構造。</li>
+            <li><strong>Art (美感藝術)</strong>：三原色調配混色實驗、調色盤創意、視覺幾何色彩。</li>
+            <li><strong>Mathematics (數學)</strong>：音階頻率八度比、幾何對稱、記憶配對與排列。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 模態框：全站版權與智慧財產權法律聲明 (Legal Modal) ================= -->
+    <div class="modal-overlay" id="legalModal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
+      <div class="modal-card legal-card">
+        <button class="modal-close-btn" id="closeLegalModalBtn" aria-label="關閉">✕</button>
+        <div class="legal-header">
+          <div style="font-size: 2.6rem; margin-bottom: 6px;">⚖️</div>
+          <h3 id="legalModalTitle">奇幻歡樂島 - 著作權與法律聲明</h3>
+        </div>
+        <div class="legal-body">
+          <h4>📌 一、 著作權與智慧財產權歸屬</h4>
+          <p>本網站「奇幻歡樂島 (Wonderland Island)」所呈現及包含之所有內容，包括但不限於前端原始碼（HTML、CSS、JavaScript）、1000 常用生活單字資料庫、互動遊戲運算邏輯、兒童繪本與科普知識、視覺圖像排版、音效合成參數與自動化腳本，均屬著作權人原創之智慧財產，受《中華民國著作權法》及國際著作權公約之嚴密保護。</p>
+          <h4>🚫 二、 嚴格禁止侵害行為</h4>
+          <p>未經著作權人正式書面授權，任何個人、團體或機構嚴禁從事以下行為：</p>
+          <ul style="padding-left: 20px; margin: 4px 0 10px 0;">
+            <li>使用自動化程式、爬蟲、下載工具或手動重製、抓取、鏡像本站之任何程式代碼、樣式或資料庫。</li>
+            <li>對本站程式碼進行反向工程、反編譯、反組譯、解構其核心邏輯或進行二次改作。</li>
+            <li>將本網站之任何部分用於商業營利、付費課程、教材販售或嵌入第三方商業平台。</li>
+          </ul>
+          <h4>🛡️ 三、 技術保護措施 (TPMs) 合法性</h4>
+          <p>本站依法設置技術防護措施，包含防複製選取、禁止未授權下載、動態反除錯、記憶體凍結保護與資料雜湊校驗。依著作權法規定，任何人不得非法破解、規避或破壞本站之安全防護機制，違者須負相應之法律責任。</p>
+          <h4>⚖️ 四、 侵權責任與法律追訴</h4>
+          <p>凡未經授權侵害本站著作權或破壞防護機制者，本團隊將委請法律顧問搜集數位存證，依法提出刑事告訴（包含著作權法第 91、92 條，以及刑法第 358、359 條妨害電腦使用罪）並請求全額民事懲罰性損害賠償。</p>
+        </div>
+        <div class="legal-footer">
+          <button class="btn-legal-confirm" id="confirmLegalBtn">我已充分瞭解並遵守</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 邏輯模組腳本載入 -->
+  <!-- ?詨?摰?霅瑟芋蝯?(蝚砌????芸?頛) -->
+  <script src="js/security.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/story.js"></script>
+  <script src="js/toys.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/knowledge.js"></script>
+  <script src="js/words-data.js"></script>
+  <script src="js/words.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
