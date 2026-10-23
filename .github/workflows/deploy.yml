@@ -40,10 +40,10 @@ jobs:
           .\scripts\verify_security.ps1
 
       # ---------- 建置靜態檔案 ----------
-      - name: Build website
-        run: |
+      #- name: Build website
+      #  run: |
           # 若使用 npm 腳本
-          npm run build
+      #    npm run build
           # 或直接呼叫 PowerShell 建置腳本
           # pwsh ./build_obfuscate.ps1
 
