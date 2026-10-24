@@ -27,7 +27,8 @@
   <div class="app-container">
     <!-- ================= 頂部導航欄 (Top Header) ================= -->
     <header class="top-header">
-      <div class="brand-logo" id="brandLogoBtn" onclick="window.appManager.switchTab('lobby')">
+      <!-- 左：品牌 LOGO -->
+      <div class="brand-logo" id="brandLogoBtn" onclick="switchMainTab('lobby')">
         <div class="logo-icon">🎪</div>
         <div>
           <h1 class="brand-title">奇幻歡樂島</h1>
@@ -35,29 +36,41 @@
         </div>
       </div>
 
-      <!-- 角色模式切換器 -->
-      <nav class="role-switcher-container" aria-label="角色切換選單">
-        <button class="role-btn active" data-role="kids" id="roleBtnKids" title="切換至兒童視角">
-          <span>🧒</span> 兒童模式
+      <!-- 中：主功能切換按鈕 -->
+      <div class="main-nav-center" id="mainNavCenter">
+        <button class="main-nav-btn active" id="btnLobby" data-main-tab="lobby"
+                aria-label="歡樂大廳">
+          🎪 歡樂大廳
         </button>
-        <button class="role-btn" data-role="parents" id="roleBtnParents" title="切換至家長視角">
-          <span>👨‍👩‍👧</span> 家長模式
+        <button class="main-nav-btn" id="btnWords" data-main-tab="words"
+                aria-label="單字探險島">
+          🔤 單字探險島
         </button>
-        <button class="role-btn" data-role="teachers" id="roleBtnTeachers" title="切換至老師視角">
-          <span>👩‍🏫</span> 老師模式
-        </button>
-      </nav>
+      </div>
 
-      <!-- 頂部快捷小工具 -->
-      <div class="header-actions">
-        <button class="action-pill-btn" id="headerBadgesBtn" title="查看我獲得的榮譽成就徽章">
-          <span>⭐</span>
-          <span id="headerStarCount">10</span>
-          <span>🏆 徽章</span>
-        </button>
-        <button class="action-icon-btn" id="headerSoundToggle" title="切換音效開關" aria-label="音效開關">
-          🔊
-        </button>
+      <!-- 右：角色模式 + 工具 -->
+      <div class="header-right">
+        <nav class="role-switcher-container" aria-label="角色切換選單">
+          <button class="role-btn active" data-role="kids" id="roleBtnKids" title="切換至兒童視角">
+            <span>🧒</span> 兒童
+          </button>
+          <button class="role-btn" data-role="parents" id="roleBtnParents" title="切換至家長視角">
+            <span>👨‍👩‍👧</span> 家長
+          </button>
+          <button class="role-btn" data-role="teachers" id="roleBtnTeachers" title="切換至老師視角">
+            <span>👩‍🏫</span> 老師
+          </button>
+        </nav>
+        <div class="header-actions">
+          <button class="action-pill-btn" id="headerBadgesBtn" title="查看我獲得的榮譽成就徽章">
+            <span>⭐</span>
+            <span id="headerStarCount">10</span>
+            <span>🏆 徽章</span>
+          </button>
+          <button class="action-icon-btn" id="headerSoundToggle" title="切換音效開關" aria-label="音效開關">
+            🔊
+          </button>
+        </div>
       </div>
     </header>
 
@@ -75,47 +88,7 @@
       </button>
     </section>
 
-    <!-- ================= 主板塊導航 (Nav Tabs) ================= -->
-    <nav class="nav-tabs-wrapper" aria-label="主題導航">
-      <ul class="nav-tabs">
-        <li class="nav-tab-item">
-          <button class="nav-tab-btn active" data-tab="lobby" id="tabLobby">
-            <span class="tab-icon">🎪</span>
-            <span class="tab-label">歡樂大廳</span>
-          </button>
-        </li>
-        <li class="nav-tab-item">
-          <button class="nav-tab-btn" data-tab="story" id="tabStory">
-            <span class="tab-icon">📖</span>
-            <span class="tab-label">奇幻故事島</span>
-          </button>
-        </li>
-        <li class="nav-tab-item">
-          <button class="nav-tab-btn" data-tab="toys" id="tabToys">
-            <span class="tab-icon">🧸</span>
-            <span class="tab-label">魔法玩具箱</span>
-          </button>
-        </li>
-        <li class="nav-tab-item">
-          <button class="nav-tab-btn" data-tab="games" id="tabGames">
-            <span class="tab-icon">🎮</span>
-            <span class="tab-label">趣味遊樂場</span>
-          </button>
-        </li>
-        <li class="nav-tab-item">
-          <button class="nav-tab-btn" data-tab="knowledge" id="tabKnowledge">
-            <span class="tab-icon">💡</span>
-            <span class="tab-label">探索小百科</span>
-          </button>
-        </li>
-        <li class="nav-tab-item">
-          <button class="nav-tab-btn" data-tab="words" id="tabWords">
-            <span class="tab-icon">🔤</span>
-            <span class="tab-label">單字探險島</span>
-          </button>
-        </li>
-      </ul>
-    </nav>
+
 
     <!-- ================= 板塊 1：歡樂大廳 (Lobby) ================= -->
     <main class="tab-panel active" id="panel-lobby">
@@ -165,12 +138,6 @@
 
       <!-- 核心主題島嶼卡片 -->
       <section class="grid-cards" aria-label="核心主題板塊">
-        <article class="feature-card" data-theme="words" id="cardWords" style="border: 2px solid rgba(255, 112, 166, 0.4);">
-          <div class="feature-card-icon" style="background: linear-gradient(135deg, #FF70A6, #FF9F1C);">🔤</div>
-          <h3 class="feature-card-title">單字探險島</h3>
-          <p class="feature-card-desc">1000 常用核心字彙！A~Z 字母 3D 字卡翻翻樂、字母拼字小練習，以及聽音測驗 Quiz 大挑戰！</p>
-          <div class="feature-card-cta">開始學習 <span>➡️</span></div>
-        </article>
 
         <article class="feature-card" data-theme="story" id="cardStory">
           <div class="feature-card-icon">📖</div>
@@ -870,6 +837,37 @@
     </div>
   </div>
 
+  <!-- ================= 版權聲明 Modal ================= -->
+  <div class="modal-overlay" id="copyrightModal" role="dialog"
+       aria-modal="true" aria-labelledby="copyrightModalTitle">
+    <div class="modal-card legal-card">
+      <button class="modal-close-btn" id="closeCopyrightModal" aria-label="關閉">✕</button>
+      <div class="legal-header">
+        <div style="font-size:2.5rem">📜</div>
+        <h3 id="copyrightModalTitle">版權與使用聲明</h3>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-top:4px;">版本：2026 繁體中文正式版</p>
+      </div>
+      <div class="legal-body">
+        <h4>🏷️ 版權歸屬</h4>
+        <p>版權所有：奇幻歡樂島創作團隊 (Jerry Ang / Wonderland Island Team)，生效日期：即日起。</p>
+        <p>本網站所有程式碼、題庫、視覺資產與品牌標誌均屬原作者著作權，受中華民國著作權法及國際公約全面保護。</p>
+        <h4>✅ 允許使用範圍</h4>
+        <p>• 於官方網站或授權平台<strong>線上瀏覽</strong>、<strong>兒童互動學習</strong>。</p>
+        <p>• 個人<strong>非商業</strong>教育用途。</p>
+        <h4>🚫 嚴格禁用行為</h4>
+        <p>• 複製、下載、鏡像或備份任何程式碼、題庫、圖像、音訊。</p>
+        <p>• 反編譯、逆向工程、破解或移除技術保護措施。</p>
+        <p>• 改作、衍生、商業營利或公開發布本網站資源。</p>
+        <h4>⚖️ 法律責任</h4>
+        <p>侵權者將依《著作權法》與《刑法》追究民事賠償與刑事責任，並保留數位取證與訴訟權。</p>
+        <p style="margin-top:12px;font-weight:700;color:#374151;">© 2026 Wonderland Island Team. All Rights Reserved.</p>
+      </div>
+      <div class="legal-footer">
+        <button class="btn-legal-confirm" id="confirmCopyrightBtn">✅ 我已閱讀</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 邏輯模組腳本載入 -->
   <script src="js/sound.js"></script>
   <script src="js/story.js"></script>
@@ -880,5 +878,56 @@
   <script src="js/words.js"></script>
   <script src="js/app.js"></script>
   <script src="js/security.js"></script>
+
+  <!-- 主功能切換 & 版權 Modal 控制 -->
+  <script>
+    function switchMainTab(tab) {
+      // 更新主按鈕 active 狀態
+      document.querySelectorAll('.main-nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mainTab === tab);
+      });
+      // 復用 appManager 切換面板（若已初始化）
+      if (window.appManager && typeof window.appManager.switchTab === 'function') {
+        window.appManager.switchTab(tab);
+      } else {
+        // fallback：直接切換 tab-panel display
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById('panel-' + tab);
+        if (target) target.classList.add('active');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // 主按鈕事件
+      document.getElementById('btnLobby').addEventListener('click', () => switchMainTab('lobby'));
+      document.getElementById('btnWords').addEventListener('click', () => switchMainTab('words'));
+
+      // 版權 Modal 開啟
+      document.getElementById('btnCopyright')?.addEventListener('click', () => {
+        document.getElementById('copyrightModal').classList.add('active');
+      });
+
+      // 版權 Modal 關閉
+      ['closeCopyrightModal', 'confirmCopyrightBtn'].forEach(id => {
+        document.getElementById(id)?.addEventListener('click', () => {
+          document.getElementById('copyrightModal').classList.remove('active');
+        });
+      });
+
+      // 點擊背景關閉
+      document.getElementById('copyrightModal')?.addEventListener('click', e => {
+        if (e.target === e.currentTarget) e.currentTarget.classList.remove('active');
+      });
+    });
+  </script>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <p class="footer-copy">© 2026 Wonderland Island Team. All Rights Reserved.</p>
+    <button class="footer-legal-btn" id="btnCopyright" aria-label="查看版權與使用聲明">
+      📜 版權與使用聲明
+    </button>
+  </div>
+</footer>
 </body>
 </html>

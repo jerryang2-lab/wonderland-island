@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 奇幻歡樂島 (Wonderland Island) - 主應用協調器
  * 負責：角色模式切換、導航分頁、星星計數、成就徽章系統、彩帶微粒與護眼計時
  */
@@ -137,9 +137,15 @@ class AppManager {
   switchTab(tabId) {
     this.activeTab = tabId;
 
-    // 更新分頁按鈕外觀
+    // 更新分頁按鈕外觀（舊版 nav-tab-btn，相容保留）
     document.querySelectorAll(".nav-tab-btn").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.tab === tabId);
+    });
+
+    // 同步更新頁首主功能按鈕 active 狀態
+    const mainTabId = (tabId === "words") ? "words" : "lobby";
+    document.querySelectorAll(".main-nav-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.mainTab === mainTabId);
     });
 
     // 顯示目標面板
@@ -158,6 +164,7 @@ class AppManager {
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
 
   // --------------------------------------------------------------------------
   // 3. 星星計數與徽章系統
