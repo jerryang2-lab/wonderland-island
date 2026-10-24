@@ -4,42 +4,31 @@
  * ?蟡????謅????????遴鬥????蝞賂???輻??????????鞈??桀???皜??２??湛??蹓澗????蹓????????? */
 
 /**
- * ============================================================================
- * 憟劂甇⊥?撜?(Wonderland Island) - 銝餅??典?隤踹
- * ----------------------------------------------------------------------------
- * Copyright (c) 2026 Jerry Ang / Wonderland Island Team. All Rights Reserved.
- * 
- * 鞎痊嚗??脫芋撘????芸??????詻?撠勗噬蝡頂蝯晞?敺??蝒蔗撣嗅凝蝎?霅瑞閮?
- * ?祉?撘Ⅳ?葉?舀???雿?瘜??箸鞎∠甈?霅瘀??芰???蝳迫?ˊ???寞?????? * ============================================================================
+ * 奇幻歡樂島 (Wonderland Island) - 主應用協調器
+ * 負責：角色模式切換、導航分頁、星星計數、成就徽章系統、彩帶微粒與護眼計時
  */
 
 class AppManager {
   constructor() {
     this.currentRole = "kids"; // "kids", "parents", "teachers"
     this.activeTab = "lobby";
-
-    if (window.securityGuard) {
-      this.stars = window.securityGuard.secureGetItem("wl_stars", 10);
-      this.badges = window.securityGuard.secureGetItem("wl_badges", {});
-    } else {
-      this.stars = parseInt(localStorage.getItem("wl_stars") || "10", 10);
-      this.badges = JSON.parse(localStorage.getItem("wl_badges") || "{}");
-    }
+    this.stars = window.securityGuard ? window.securityGuard.secureGetItem("wl_stars", 10) : parseInt(localStorage.getItem("wl_stars") || "10", 10);
+    this.badges = JSON.parse(localStorage.getItem("wl_badges") || "{}");
 
     this.eyeTimerMinutes = 0;
     this.eyeTimerInterval = null;
 
     this.badgeCatalog = {
-      storyReader: { name: "??撠??, icon: "??", desc: "摰?梯?銝行蝝Ｙ鼓?砍雀" },
-      musician: { name: "撠??單?摰?, icon: "?", desc: "?典蔗?脤?港?敶?甇⊥???" },
-      colorMaster: { name: "?脣蔗擳?撣?, icon: "?妒", desc: "?刻矽?脣祕撽恕??憟劂?" },
-      memoryMaster: { name: "閮??鈭?, icon: "??", desc: "???寥???????拙?? },
-      balloonPopper: { name: "?單蟡???, icon: "??", desc: "瘞??瘨?璅敺?100 ?誑銝? },
-      artist: { name: "?菜?撠摰?, icon: "?", desc: "?典蔗?孵??急?桃??菜?雿?" },
-      scholar: { name: "?箸撠?憯?, icon: "?", desc: "摰??Ｙ揣撠蝘????" },
-      wordLearner: { name: "?桀?撠?芸振", icon: "?", desc: "?Ｙ揣蝧駁 20 ?虜?典摮?? },
-      spellingChampion: { name: "?澆?蟡???, icon: "?", desc: "???澆 10 ?迤蝣箏?瘥摮? },
-      quizMaster: { name: "?桀??箏???, icon: "??", desc: "?典摮葫撽??唬葉?脣? 100 ?遛?? }
+      storyReader: { name: "故事小偵探", icon: "📖", desc: "完整閱讀並探索繪本島" },
+      musician: { name: "小小音樂家", icon: "🎵", desc: "在彩色鐵琴上彈奏歡樂旋律" },
+      colorMaster: { name: "色彩魔法師", icon: "🧪", desc: "在調色實驗室合成奇幻生物" },
+      memoryMaster: { name: "記憶力超人", icon: "🦁", desc: "成功匹配所有萌萌動物卡片" },
+      balloonPopper: { name: "戳戳神射手", icon: "🎈", desc: "氣球消消樂獲得 100 分以上" },
+      artist: { name: "創意小畫家", icon: "🎨", desc: "在彩虹小畫板揮灑創意作品" },
+      scholar: { name: "智慧小博士", icon: "💡", desc: "完成探索小百科的益智問答" },
+      wordLearner: { name: "單字小探險家", icon: "🔤", desc: "探索翻閱 20 個常用單字卡片" },
+      spellingChampion: { name: "拼字神射手", icon: "🎯", desc: "成功拼出 10 個正確字母單字" },
+      quizMaster: { name: "單字智多星", icon: "🏆", desc: "在單字測驗挑戰中獲得 100 分滿分" }
     };
   }
 
@@ -51,24 +40,13 @@ class AppManager {
     this.updateStarsDisplay();
     this.initEyeTimer();
 
-
+    if (window.storyManager) window.storyManager.init();
     if (window.toysManager) window.toysManager.init();
     if (window.gamesManager) window.gamesManager.init();
     if (window.knowledgeManager) window.knowledgeManager.init();
     if (window.wordsManager) window.wordsManager.init();
 
     this.switchRole("kids");
-  }
-
-  /**
-   * 閮擃楛摨虫?霅瘀????詨?鞈??拐辣
-   */
-  freezeCoreData() {
-    if (window.securityGuard) {
-      if (window.WORDS_DATABASE) window.securityGuard.deepFreeze(window.WORDS_DATABASE);
-      if (window.storyData) window.securityGuard.deepFreeze(window.storyData);
-      if (window.knowledgeData) window.securityGuard.deepFreeze(window.knowledgeData);
-    }
   }
 
   bindRoleSwitcher() {
@@ -86,42 +64,44 @@ class AppManager {
     this.currentRole = role;
     document.body.dataset.role = role;
 
+    document.querySelectorAll(".role-btn").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.role === role);
     });
 
+    const banner = document.getElementById("roleBanner");
     const bannerIcon = document.getElementById("roleBannerIcon");
     const bannerTitle = document.getElementById("roleBannerTitle");
     const bannerDesc = document.getElementById("roleBannerDesc");
     const bannerAction = document.getElementById("roleBannerAction");
 
     if (role === "kids") {
-      if (bannerIcon) bannerIcon.textContent = "??";
-      if (bannerTitle) bannerTitle.textContent = "?剁???窄嚗?憭拇閬????萇?憛??ｇ?";
-      if (bannerDesc) bannerDesc.textContent = "暺??∠????嚗?遛皛輻?????旨霅賢噬蝡?";
+      if (bannerIcon) bannerIcon.textContent = "🌟";
+      if (bannerTitle) bannerTitle.textContent = "嗨！我是星寶！今天想要聽故事、玩鐵琴還是塗鴉呢？";
+      if (bannerDesc) bannerDesc.textContent = "點點卡片開啟冒險，收集滿滿的金色星星與榮譽徽章！";
       if (bannerAction) {
-        bannerAction.textContent = "?? ??瘥撽?";
+        bannerAction.textContent = "🎁 開啟每日驚喜";
         bannerAction.onclick = () => this.openDailyGift();
       }
     } else if (role === "parents") {
-      if (bannerIcon) bannerIcon.textContent = "???抽??;
-      if (bannerTitle) bannerTitle.textContent = "閬芣??振?瑟憟踝?霅瑞閮??典歇??嚗遣霅唳?甈⊿隡?20 ????;
-      if (bannerDesc) bannerDesc.textContent = "?憛??典??箸皞?鈭扛摮霈撠店?血????暑閫撖辣隡豢暑??撠?;
+      if (bannerIcon) bannerIcon.textContent = "👨‍👩‍👧";
+      if (bannerTitle) bannerTitle.textContent = "親愛的家長您好！護眼計時器已啟動，建議每次陪伴 20 分鐘。";
+      if (bannerDesc) bannerDesc.textContent = "各板塊底部均為您準備了「親子共讀對話錦囊」與生活觀察延伸活動引導。";
       if (bannerAction) {
-        bannerAction.textContent = "?梧? 霅瑞?亙熒??";
+        bannerAction.textContent = "⏱️ 護眼健康手冊";
         bannerAction.onclick = () => this.openEyeCareModal();
       }
     } else if (role === "teachers") {
-      if (bannerIcon) bannerIcon.textContent = "????;
-      if (bannerTitle) bannerTitle.textContent = "?祆??葦嚗蝡摰孵?Ｗ???STEAM ?匱?敹?擗?璅?;
-      if (bannerDesc) bannerDesc.textContent = "???璅?隤輯??靘玨??蝯?隢?蝬梧??拙???撣園??函?Ｙ揣??;
+      if (bannerIcon) bannerIcon.textContent = "👩‍🏫";
+      if (bannerTitle) bannerTitle.textContent = "敬愛的老師！本站內容全面契合 STEAM 與幼兒核心素養指標。";
+      if (bannerDesc) bannerDesc.textContent = "故事、音樂與調色均提供課堂分組討論題綱，適合投屏帶領全班探索。";
       if (bannerAction) {
-        bannerAction.textContent = "?? STEAM 蝝???";
+        bannerAction.textContent = "📋 STEAM 素養指南";
         bannerAction.onclick = () => this.openCurriculumModal();
       }
     }
 
-    if (window.storyManager && window.storyData) {
-      window.storyManager.updateRolePanel(window.storyData[window.storyManager.currentPageIndex]);
+    if (window.storyManager && storyData) {
+      window.storyManager.updateRolePanel(storyData[window.storyManager.currentPageIndex]);
     }
   }
 
@@ -160,6 +140,7 @@ class AppManager {
       activePanel.classList.add("active");
     }
 
+    if (tabId === "games" && window.gamesManager) {
       setTimeout(() => window.gamesManager.resizeCanvas(), 50);
     }
 
@@ -168,11 +149,7 @@ class AppManager {
 
   addStars(amount) {
     this.stars += amount;
-    if (window.securityGuard) {
-      window.securityGuard.secureSetItem("wl_stars", this.stars);
-    } else {
-      localStorage.setItem("wl_stars", this.stars.toString());
-    }
+    if (window.securityGuard) { window.securityGuard.secureSetItem("wl_stars", this.stars); } else { localStorage.setItem("wl_stars", this.stars); }
     this.updateStarsDisplay();
   }
 
@@ -186,11 +163,7 @@ class AppManager {
   unlockBadge(badgeKey) {
     if (!this.badges[badgeKey]) {
       this.badges[badgeKey] = true;
-      if (window.securityGuard) {
-        window.securityGuard.secureSetItem("wl_badges", this.badges);
-      } else {
-        localStorage.setItem("wl_badges", JSON.stringify(this.badges));
-      }
+      localStorage.setItem("wl_badges", JSON.stringify(this.badges));
 
       const info = this.badgeCatalog[badgeKey];
       if (info) {
@@ -199,7 +172,7 @@ class AppManager {
         this.addStars(3);
 
         setTimeout(() => {
-          alert(`?? 璁株亳?停閫??嚗n?脣???{info.icon} ${info.name}??\n?脣?憿? 3 憿??脫???`);
+          alert(`🏆 榮譽成就解鎖！\n獲得【${info.icon} ${info.name}】！\n獲得額外 3 顆金色星星！`);
         }, 200);
       }
     }
@@ -219,7 +192,7 @@ class AppManager {
       el.innerHTML = `
         <div class="badge-icon">${item.icon}</div>
         <div class="badge-name">${item.name}</div>
-        <div class="badge-status">${isUnlocked ? "??撌脰圾?? : "?? 敺蝝?}</div>
+        <div class="badge-status">${isUnlocked ? "✨ 已解鎖" : "🔒 待探索"}</div>
         <div style="font-size: 0.72rem; color: #64748B; margin-top: 4px;">${item.desc}</div>
       `;
       container.appendChild(el);
@@ -234,7 +207,7 @@ class AppManager {
       soundBtn.addEventListener("click", () => {
         const isMuted = window.soundEngine.toggleMute();
         soundBtn.classList.toggle("muted", isMuted);
-        soundBtn.innerHTML = isMuted ? "??" : "??";
+        soundBtn.innerHTML = isMuted ? "🔇" : "🔊";
       });
     }
 
@@ -245,6 +218,7 @@ class AppManager {
       });
     }
 
+    const mascot = document.getElementById("heroMascot");
     if (mascot) {
       mascot.addEventListener("click", () => {
         window.soundEngine.playBoing();
@@ -254,19 +228,16 @@ class AppManager {
       });
     }
 
+    const dailyGift = document.getElementById("dailyGiftBox");
     if (dailyGift) {
       dailyGift.addEventListener("click", () => {
         this.openDailyGift();
       });
     }
-
     const openLegalBtn = document.getElementById("openLegalModalBtn");
     if (openLegalBtn) {
-      openLegalBtn.addEventListener("click", () => {
-        this.openLegalModal();
-      });
+      openLegalBtn.addEventListener("click", () => this.openLegalModal());
     }
-
     const confirmLegalBtn = document.getElementById("confirmLegalBtn");
     if (confirmLegalBtn) {
       confirmLegalBtn.addEventListener("click", () => {
@@ -281,7 +252,7 @@ class AppManager {
     window.soundEngine.playSuccess();
     this.spawnConfetti();
     this.addStars(5);
-    alert("?? ???拳?脣?瘥?賡?嚗? 憿??脣???嚗 敹急?餉圾???改?");
+    alert("🎁 哇！開箱獲得每日能量：5 顆金色小星星！✨ 快拿去解鎖新遊戲吧！");
   }
 
   spawnConfetti() {
@@ -326,18 +297,19 @@ class AppManager {
     if (modal) modal.classList.add("active");
   }
 
-  openCurriculumModal() {
-    const modal = document.getElementById("curriculumModal");
-    if (modal) modal.classList.add("active");
-  }
-
   openLegalModal() {
     if (window.soundEngine) window.soundEngine.playPop();
     const modal = document.getElementById("legalModal");
     if (modal) modal.classList.add("active");
   }
 
+  openCurriculumModal() {
+    const modal = document.getElementById("curriculumModal");
+    if (modal) modal.classList.add("active");
+  }
+
   initEyeTimer() {
+    this.eyeTimerInterval = setInterval(() => {
       this.eyeTimerMinutes++;
       if (this.eyeTimerMinutes % 20 === 0 && this.currentRole === "parents") {
         this.openEyeCareModal();
@@ -346,6 +318,7 @@ class AppManager {
   }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
   window.appManager = new AppManager();
   window.appManager.init();
 });
