@@ -108,6 +108,38 @@ class AppManager {
     if (window.storyManager && storyData) {
       window.storyManager.updateRolePanel(storyData[window.storyManager.currentPageIndex]);
     }
+
+    // 控制單字島子功能按鈕的顯示/隱藏
+    this.updateWordsSubNav(role);
+  }
+
+  updateWordsSubNav(role) {
+    const ROLE_LEVEL = { kids: 0, parents: 1, teachers: 2 };
+    const currentLevel = ROLE_LEVEL[role] ?? 0;
+
+    document.querySelectorAll('.words-mode-tab-btn[data-min-role]').forEach(btn => {
+      const minLevel = ROLE_LEVEL[btn.dataset.minRole] ?? 0;
+      const allowed = currentLevel >= minLevel;
+
+      // 顯示或隱藏按鈕
+      btn.style.display = allowed ? '' : 'none';
+
+      // 若當前 active 按鈕被隱藏，切換到第一個可見按鈕
+      if (!allowed && btn.classList.contains('active')) {
+        btn.classList.remove('active');
+        const firstVisible = document.querySelector(
+          '.words-mode-tab-btn[data-min-role]:not([style*="none"])'
+        );
+        if (firstVisible) {
+          firstVisible.classList.add('active');
+          // 同步觸發子面板切換
+          const mode = firstVisible.dataset.mode;
+          if (window.wordsManager && typeof window.wordsManager.switchMode === 'function') {
+            window.wordsManager.switchMode(mode);
+          }
+        }
+      }
+    });
   }
 
   // --------------------------------------------------------------------------
